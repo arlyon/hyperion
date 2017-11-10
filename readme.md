@@ -6,37 +6,50 @@
 - [Django Channels (live webpages with WebSockets)](https://www.ploggingdev.com/2017/11/building-a-chat-room-using-django-channels/)
 - [Front end checklist](https://github.com/thedaviddias/Front-End-Checklist)
 
-## ideas
 
-### travel agent for uni
+## Apis:
 
-- hook into class timetables
-- hook into bus timetables
-- hook into parking lot info
-- aggregate parking data for a few weeks to predict trends
-- hook into pushbullet
-- suggest ride shares: offer or request cars new you
+- BikeRegister
+- Police
+- Google maps
+- Twitter RSS
+- Postcodes
 
-Keeps a track of your classes and calculates which bus / parking lot you 
-should use to get there on time... can deliver push notifications to 
-your phone to remind you. UI is just a list of events: take X bus, go to 
-class, go to class, take X bus.
+## Key tech:
 
-### Lothian buses tracker api
+### Flask
+- used to handle web requests
+- allows you to define routes (with the @app.route decorator)
 
-[link](https://lothianbuses.co.uk/journeyplanner/tracker-api)
+### Jinja2
+- allows you to define templates and inject veriables into them on the server side
+- comes packaged with flask by default
 
-#### action=stops
-Gets stops within a certain radius of a location
+### Peewee
+- an object-relational-mapper
+- allows you do define classes and save and fetch them easily
+- NO MORE SQL QUERIES <3<3
 
-- lat
-- lng
-- radius
+### React
+- allows you to create complex uis with javascript
 
-### Tram data
+### Webpack
+- a build tool for the web
+- allows you to compile "future" js into browser compatible code
+- also supports other formats: images, css, svg, etc.
 
-## BikeRegister
-## Police
-## Google maps
-## Twitter RSS
-## Postcodes
+### Typescript (?)
+- brings optional typing to javascript
+- provides better type inference and code completion
+- entirely optional
+- typescript and javascript can live side-by-side
+
+## To install
+
+- Make sure you have node and npm installed
+- make sure you have python3 installed
+- run these commands:
+
+      pip3 install -i requirements.txt
+      npm run build
+      python3 back/app.py
