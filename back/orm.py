@@ -22,3 +22,15 @@ class Person(BaseModel):
     name = CharField()
     birthday = DateField()
     is_relative = BooleanField()
+
+    def __str__(self):
+        return f"A person named {self.name}."
+
+
+class PostCodeMapping(BaseModel):
+    """
+    Maps a postcode to a lat and long.
+    """
+    postcode = CharField()
+    lat = FloatField()
+    long = FloatField()
