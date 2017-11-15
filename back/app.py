@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, json
 from peewee import OperationalError
 import requests
 
@@ -33,8 +33,13 @@ def person(name=None):
         except DoesNotExist:
             return jsonify({'error': 'Not Found'}), 404
 
+@app.route('/api/bikes/')
+def get_bikes():
+    with open("../stolenbikes.json", "r") as f:
+        bikesdata = json.load(f)
+    return jsonify(bikesdata[:100])
 
-@app.route('/api/crime/<string:postcode>')
+@app.route('/api/crime/<string:postcode>') #assign function to specified route
 def get_crime(postcode):
     """
     Gets the crime nearby to a given postcode.
