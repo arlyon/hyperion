@@ -53,8 +53,8 @@
 
 - Make sure you have node and npm installed
 - make sure you have python3 installed
-- run these commands:
 
+run these commands:
 
     pip3 install -r requirements.txt
     npm install
