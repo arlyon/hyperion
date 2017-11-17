@@ -1,8 +1,5 @@
 .idea/
 node_modules/
-__pycache__/
-static/app.*
 venv/
-back/static/app\.js
-
-back/static/app\.js\.map
+back/static/app\.*
+docs/
