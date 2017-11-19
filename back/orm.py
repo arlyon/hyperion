@@ -8,6 +8,7 @@ class BaseModel(Model):
     """
     Defines some base properties for a model.
     """
+
     class Meta:
         database = db  # specify the db to use
 
@@ -15,16 +16,30 @@ class BaseModel(Model):
         return model_to_dict(self)
 
 
-class Person(BaseModel):
+class Neighbourhood(BaseModel):
     """
-    The person model.
+    Contains information about a police neighbourhood.
     """
     name = CharField()
-    birthday = DateField()
-    is_relative = BooleanField()
+    code = CharField()
+    description = CharField(null=True)
+    email = CharField(null=True)
+    facebook = CharField(null=True)
+    telephone = CharField(null=True)
+    twitter = CharField(null=True)
 
-    def __str__(self):
-        return f"A person named {self.name}."
+    def serialize(self):
+        data = model_to_dict(self, backrefs=True)
+        data["links"] = data.pop("link_set")
+        data["locations"] = data.pop("location_set")
+        data.pop("postcodemapping_set")
+        return data
+
+
+class Link(BaseModel):
+    name = CharField()
+    url = CharField()
+    neighbourhood = ForeignKeyField(Neighbourhood)
 
 
 class PostCodeMapping(BaseModel):
@@ -34,3 +49,24 @@ class PostCodeMapping(BaseModel):
     postcode = CharField()
     lat = FloatField()
     long = FloatField()
+    country = CharField()
+    district = CharField()
+    zone = CharField()
+    neighbourhood = ForeignKeyField(Neighbourhood, null=True)
+
+    def serialize(self):
+        return model_to_dict(self, exclude=[PostCodeMapping.id])
+
+
+class Location(BaseModel):
+    """
+    Contains data about police stations.
+    """
+    address = CharField()
+    description = CharField(null=True)
+    latitude = FloatField(null=True)
+    longitude = FloatField(null=True)
+    name = CharField()
+    neighbourhood = ForeignKeyField(Neighbourhood)
+    postcode = ForeignKeyField(PostCodeMapping)
+    type = CharField()

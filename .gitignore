@@ -2,3 +2,5 @@
 node_modules/
 venv/
 back/static/app\.*
+
+back/__pycache__/
