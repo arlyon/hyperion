@@ -47,6 +47,7 @@ def get_postcode_mapping(postcode: str) -> PostCodeMapping or None:
     :param postcode: The postcode.
     :return: the Mapping.
     """
+    postcode = postcode.replace(" ", "")
     try:
         return PostCodeMapping.get(PostCodeMapping.postcode == postcode)
     except DoesNotExist:
@@ -79,6 +80,7 @@ def get_neighbourhood_from_db(postcode: str) -> Neighbourhood or None:
     :param postcode: The postcode to look up.
     :return: The Neighbourhood or None if not found.
     """
+    postcode = postcode.replace(" ", "")
     mapping = get_postcode_mapping(postcode)
     if mapping is None:
         return None
@@ -137,7 +139,7 @@ def get_neighbourhood_from_db(postcode: str) -> Neighbourhood or None:
 
 @app.route('/api/nearby/<string:postcode>')
 @app.route('/api/nearby/<string:postcode>/<int:limit>')
-def get_nearby(postcode, limit=10):
+def get_nearby(postcode: str, limit=10):
     """
     Gets wikipedia articles near a given postcode.
     :param postcode: The UK postcode to look up.
