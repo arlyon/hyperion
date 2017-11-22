@@ -1,5 +1,8 @@
 # portal
 
+## Report
+- [Click here to view/edit report](https://docs.google.com/document/d/1NSfq18kf0ULAA4pPGV_NvUkAlWMVCDpIF-dHX-H96T4/edit?usp=sharing)
+
 ## useful articles
 
 - [React Component Patterns](https://medium.com/gitconnected/react-component-patterns-ab1f09be2c82)
@@ -16,6 +19,7 @@
 - Google maps
 - Twitter RSS
 - Postcodes
+- Wikipedia
 
 ## Key tech:
 
