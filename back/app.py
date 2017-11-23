@@ -182,4 +182,4 @@ def get_neighbourhood(postcode):
 if __name__ == '__main__':
     db.connect()
     db.create_tables([PostCodeMapping, Neighbourhood, Location, Link], safe=True)
-    app.run(port=2020)
+    app.run(port=2020, host='0.0.0.0')
