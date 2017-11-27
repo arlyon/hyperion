@@ -1,5 +1,6 @@
 from json import JSONDecodeError
 import requests
+from bs4 import BeautifulSoup
 from peewee import DoesNotExist
 
 from models.location import Location
@@ -102,3 +103,42 @@ def get_neighbourhood_from_db(postcode: str) -> Neighbourhood or None:
         mapping.save()
 
         return neighbourhood
+
+
+def get_bikes_request():
+    """
+    Gets the full list of bikes from the bikeregister site.
+    :return:
+    """
+    session = requests.session()
+    request = session.get('https://www.bikeregister.com/stolen-bikes')
+    soup = BeautifulSoup(request.text, 'html.parser')
+
+    token = soup.find("input", {"name": "_token"}).get('value')
+    XSRF_TOKEN = request.cookies["XSRF-TOKEN"]
+    laravel_session = request.cookies["laravel_session"]
+
+    # __cfduid, cart_identifier, locale, XSRF-TOKEN, laravel_session
+    headers = {
+        'cookie': f'XSRF-TOKEN={XSRF_TOKEN}; laravel_session={laravel_session}',
+        'origin': 'https://www.bikeregister.com',
+        'accept-encoding': 'gzip, deflate, br',
+        'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
+        'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36',
+        'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'accept': '*/*',
+        'referer': 'https://www.bikeregister.com/stolen-bikes',
+        'authority': 'www.bikeregister.com',
+        'x-requested-with': 'XMLHttpRequest',
+    }
+
+    data = [
+        ('_token', token),
+        ('make', ''),
+        ('model', ''),
+        ('colour', ''),
+        ('reporting_period', '1'),
+    ]
+
+    request = requests.post('https://www.bikeregister.com/stolen-bikes', headers=headers, data=data)
+    return request.json()
