@@ -9,10 +9,10 @@ import requests
 from bs4 import BeautifulSoup
 from peewee import DoesNotExist
 
-from models.bikes import Bike
-from models.location import Location
-from models.neighbourhood import Neighbourhood, Link
-from models.postcode import PostCodeMapping
+from back.models.location import Location
+from back.models.neighbourhood import Neighbourhood, Link
+from back.models.postcode import PostCodeMapping
+from back.models.bikes import Bike
 
 
 def get_postcode_mapping(postcode: str) -> PostCodeMapping or None:
