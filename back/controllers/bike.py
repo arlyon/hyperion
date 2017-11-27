@@ -1,10 +1,9 @@
-from flask import json, jsonify
+from flask import jsonify
 
 from back import app
+from models.tools import get_bikes_from_db
 
 
-@app.route('/api/bikes/')
-def get_bikes():
-    with open("../stolenbikes.json", "r") as f:
-        bikesdata = json.load(f)
-    return jsonify(bikesdata[:100])
+@app.route('/api/bikes/<string:postcode>')
+def get_bikes(postcode):
+    return jsonify([bike.serialize() for bike in get_bikes_from_db(postcode)])

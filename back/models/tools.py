@@ -1,15 +1,22 @@
 from json import JSONDecodeError
+
+import datetime
+from typing import List
+
+import geopy
+import geopy.distance
 import requests
 from bs4 import BeautifulSoup
 from peewee import DoesNotExist
 
+from models.bikes import Bike
 from models.location import Location
 from models.neighbourhood import Neighbourhood, Link
 from models.postcode import PostCodeMapping
 
 
 def get_postcode_mapping(postcode: str) -> PostCodeMapping or None:
-    """
+    """w
     Gets the postcode mapping for a given postcode.
     Acts as a middleware between us and the API, caching results.
     :param postcode: The postcode.
@@ -105,7 +112,45 @@ def get_neighbourhood_from_db(postcode: str) -> Neighbourhood or None:
         return neighbourhood
 
 
-def get_bikes_request():
+def should_update_bikes():
+    bike = most_recent_bike()
+    if bike is not None:
+        return bike.cached_date < datetime.datetime.now()-datetime.timedelta(days=1)
+    else:
+        return True
+
+
+def most_recent_bike() -> Bike or None:
+    try:
+        return Bike.select().order_by(Bike.cached_date.desc()).get()
+    except DoesNotExist as e:
+        return None
+
+
+def get_bikes_from_db(postcode: str, range=10) -> List[Bike] or None:
+
+    if should_update_bikes():
+        get_and_cache_from_server()
+
+    mapping = get_postcode_mapping(postcode)
+
+    start = geopy.Point(mapping.lat, mapping.long)
+    distance = geopy.distance.vincenty(kilometers=range*1.6)
+
+    lat_end = distance.destination(point=start, bearing=0).latitude
+    lat_start = distance.destination(point=start, bearing=180).latitude
+    long_start = distance.destination(point=start, bearing=270).longitude
+    long_end = distance.destination(point=start, bearing=90).longitude
+
+    return Bike.select().where(
+        lat_start < Bike.latitude,
+        Bike.latitude < lat_end,
+        long_start < Bike.longitude,
+        Bike.longitude < long_end
+    )
+
+
+def get_and_cache_from_server():
     """
     Gets the full list of bikes from the bikeregister site.
     :return:
@@ -141,4 +186,25 @@ def get_bikes_request():
     ]
 
     request = requests.post('https://www.bikeregister.com/stolen-bikes', headers=headers, data=data)
-    return request.json()
+    data = request.json()
+
+    most_recent_cache = most_recent_bike()
+
+    cached_id = most_recent_cache.id if most_recent_cache is not None else -1
+
+    for index, line in enumerate(data):
+        if index > cached_id:
+            Bike.create(
+                id=index,
+                make=line["make"],
+                model=line["model"],
+                colour=line["colour"],
+                latitude=line["latitude"],
+                longitude=line["longitude"],
+                frame_number=line["frame_number"],
+                rfid=line["rfid"],
+                description=line["description"],
+                reported_at=line["reported_at"]
+            )
+
+    return data
