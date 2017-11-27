@@ -1,9 +1,9 @@
 
 import peewee as pw
 
-from models.base import BaseModel
-from models.neighbourhood import Neighbourhood
-from models.postcode import PostCodeMapping
+from back.models.base import BaseModel
+from back.models.neighbourhood import Neighbourhood
+from back.models.postcode import PostCodeMapping
 
 
 class Location(BaseModel):

@@ -1,7 +1,7 @@
 import requests
 from flask import jsonify
 from back import app
-from models.tools import get_postcode_mapping, get_neighbourhood_from_db
+from back.models.tools import get_postcode_mapping, get_neighbourhood_from_db
 
 
 @app.route('/api/nearby/<string:postcode>')

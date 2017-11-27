@@ -1,7 +1,7 @@
 from playhouse.shortcuts import model_to_dict
 import peewee as pw
-from models.base import BaseModel
-from models.neighbourhood import Neighbourhood
+from back.models.base import BaseModel
+from back.models.neighbourhood import Neighbourhood
 
 
 class PostCodeMapping(BaseModel):

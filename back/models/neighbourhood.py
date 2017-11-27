@@ -1,6 +1,6 @@
 import peewee as pw
 from playhouse.shortcuts import model_to_dict
-from models.base import BaseModel
+from back.models.base import BaseModel
 
 
 class Neighbourhood(BaseModel):
