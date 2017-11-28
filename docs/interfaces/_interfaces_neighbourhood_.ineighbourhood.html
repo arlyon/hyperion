@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>IPerson | Crime Tracker</title>
+	<title>INeighbourhood | Crime Tracker</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,32 +56,24 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_components_person_.html">&quot;components/person&quot;</a>
+					<a href="../modules/_interfaces_neighbourhood_.html">&quot;interfaces/Neighbourhood&quot;</a>
 				</li>
 				<li>
-					<a href="_components_person_.iperson.html">IPerson</a>
+					<a href="_interfaces_neighbourhood_.ineighbourhood.html">INeighbourhood</a>
 				</li>
 			</ul>
-			<h1>Interface IPerson</h1>
+			<h1>Interface INeighbourhood</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-comment">
-				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>The IPerson interface that defines
-						the properties for a person.</p>
-					</div>
-				</div>
-			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">IPerson</span>
+						<span class="target">INeighbourhood</span>
 					</li>
 				</ul>
 			</section>
@@ -92,10 +84,15 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_components_person_.iperson.html#birthday" class="tsd-kind-icon">birthday</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_components_person_.iperson.html#id" class="tsd-kind-icon">id</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_components_person_.iperson.html#is_relative" class="tsd-kind-icon">is_<wbr>relative</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_components_person_.iperson.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_neighbourhood_.ineighbourhood.html#code" class="tsd-kind-icon">code</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_neighbourhood_.ineighbourhood.html#email" class="tsd-kind-icon">email</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_neighbourhood_.ineighbourhood.html#facebook" class="tsd-kind-icon">facebook</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_neighbourhood_.ineighbourhood.html#id" class="tsd-kind-icon">id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_neighbourhood_.ineighbourhood.html#links" class="tsd-kind-icon">links</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_neighbourhood_.ineighbourhood.html#locations" class="tsd-kind-icon">locations</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_neighbourhood_.ineighbourhood.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_neighbourhood_.ineighbourhood.html#telephone" class="tsd-kind-icon">telephone</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_neighbourhood_.ineighbourhood.html#twitter" class="tsd-kind-icon">twitter</a></li>
 							</ul>
 						</section>
 					</div>
@@ -104,12 +101,32 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="birthday" class="tsd-anchor"></a>
-					<h3>birthday</h3>
-					<div class="tsd-signature tsd-kind-icon">birthday<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="code" class="tsd-anchor"></a>
+					<h3>code</h3>
+					<div class="tsd-signature tsd-kind-icon">code<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/arlyon/portal/blob/9e51f23/front/components/person.tsx#L20">components/person.tsx:20</a></li>
+							<li>Defined in <a href="https://github.com/arlyon/portal/blob/6a15c67/front/interfaces/Neighbourhood.ts#L2">interfaces/Neighbourhood.ts:2</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="email" class="tsd-anchor"></a>
+					<h3>email</h3>
+					<div class="tsd-signature tsd-kind-icon">email<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/arlyon/portal/blob/6a15c67/front/interfaces/Neighbourhood.ts#L3">interfaces/Neighbourhood.ts:3</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="facebook" class="tsd-anchor"></a>
+					<h3>facebook</h3>
+					<div class="tsd-signature tsd-kind-icon">facebook<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/arlyon/portal/blob/6a15c67/front/interfaces/Neighbourhood.ts#L4">interfaces/Neighbourhood.ts:4</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -119,17 +136,27 @@
 					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/arlyon/portal/blob/9e51f23/front/components/person.tsx#L18">components/person.tsx:18</a></li>
+							<li>Defined in <a href="https://github.com/arlyon/portal/blob/6a15c67/front/interfaces/Neighbourhood.ts#L5">interfaces/Neighbourhood.ts:5</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="is_relative" class="tsd-anchor"></a>
-					<h3>is_<wbr>relative</h3>
-					<div class="tsd-signature tsd-kind-icon">is_<wbr>relative<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<a name="links" class="tsd-anchor"></a>
+					<h3>links</h3>
+					<div class="tsd-signature tsd-kind-icon">links<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/arlyon/portal/blob/9e51f23/front/components/person.tsx#L21">components/person.tsx:21</a></li>
+							<li>Defined in <a href="https://github.com/arlyon/portal/blob/6a15c67/front/interfaces/Neighbourhood.ts#L6">interfaces/Neighbourhood.ts:6</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="locations" class="tsd-anchor"></a>
+					<h3>locations</h3>
+					<div class="tsd-signature tsd-kind-icon">locations<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/arlyon/portal/blob/6a15c67/front/interfaces/Neighbourhood.ts#L7">interfaces/Neighbourhood.ts:7</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -139,7 +166,27 @@
 					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/arlyon/portal/blob/9e51f23/front/components/person.tsx#L19">components/person.tsx:19</a></li>
+							<li>Defined in <a href="https://github.com/arlyon/portal/blob/6a15c67/front/interfaces/Neighbourhood.ts#L8">interfaces/Neighbourhood.ts:8</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="telephone" class="tsd-anchor"></a>
+					<h3>telephone</h3>
+					<div class="tsd-signature tsd-kind-icon">telephone<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/arlyon/portal/blob/6a15c67/front/interfaces/Neighbourhood.ts#L9">interfaces/Neighbourhood.ts:9</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="twitter" class="tsd-anchor"></a>
+					<h3>twitter</h3>
+					<div class="tsd-signature tsd-kind-icon">twitter<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/arlyon/portal/blob/6a15c67/front/interfaces/Neighbourhood.ts#L10">interfaces/Neighbourhood.ts:10</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -155,22 +202,34 @@
 						<a href="../modules/_app_.html">"app"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_components_crime_.html">"components/crime"</a>
+						<a href="../modules/_components_bikelist_.html">"components/<wbr>Bike<wbr>List"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_components_people_.html">"components/people"</a>
-					</li>
-					<li class="current tsd-kind-external-module">
-						<a href="../modules/_components_person_.html">"components/person"</a>
+						<a href="../modules/_components_crime_.html">"components/<wbr>Crime"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_components_searchbox_.html">"components/searchbox"</a>
+						<a href="../modules/_components_postcodedata_.html">"components/<wbr>Post<wbr>Code<wbr>Data"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_components_searchbox_.html">"components/<wbr>Search<wbr>Box"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_config_.html">"config"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_data_postcodes_.html">"data/postcodes"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_hot_.html">"hot"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="../modules/_interfaces_address_.html">"interfaces/<wbr>Address"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_interfaces_crimeatlocation_.html">"interfaces/<wbr>Crime<wbr>AtLocation"</a>
+					</li>
+					<li class="current tsd-kind-external-module">
+						<a href="../modules/_interfaces_neighbourhood_.html">"interfaces/<wbr>Neighbourhood"</a>
 					</li>
 				</ul>
 			</nav>
@@ -179,27 +238,39 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="_components_person_.iperson.html" class="tsd-kind-icon">IPerson</a>
+						<a href="_interfaces_neighbourhood_.ineighbourhood.html" class="tsd-kind-icon">INeighbourhood</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_components_person_.iperson.html#birthday" class="tsd-kind-icon">birthday</a>
+								<a href="_interfaces_neighbourhood_.ineighbourhood.html#code" class="tsd-kind-icon">code</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_components_person_.iperson.html#id" class="tsd-kind-icon">id</a>
+								<a href="_interfaces_neighbourhood_.ineighbourhood.html#email" class="tsd-kind-icon">email</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_components_person_.iperson.html#is_relative" class="tsd-kind-icon">is_<wbr>relative</a>
+								<a href="_interfaces_neighbourhood_.ineighbourhood.html#facebook" class="tsd-kind-icon">facebook</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_components_person_.iperson.html#name" class="tsd-kind-icon">name</a>
+								<a href="_interfaces_neighbourhood_.ineighbourhood.html#id" class="tsd-kind-icon">id</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_interfaces_neighbourhood_.ineighbourhood.html#links" class="tsd-kind-icon">links</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_interfaces_neighbourhood_.ineighbourhood.html#locations" class="tsd-kind-icon">locations</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_interfaces_neighbourhood_.ineighbourhood.html#name" class="tsd-kind-icon">name</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_interfaces_neighbourhood_.ineighbourhood.html#telephone" class="tsd-kind-icon">telephone</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_interfaces_neighbourhood_.ineighbourhood.html#twitter" class="tsd-kind-icon">twitter</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-function tsd-parent-kind-external-module">
-						<a href="../modules/_components_person_.html#person" class="tsd-kind-icon">Person</a>
-					</li>
 				</ul>
 			</nav>
 		</div>

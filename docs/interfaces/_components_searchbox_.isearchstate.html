@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;hot&quot; | Crime Tracker</title>
+	<title>ISearchState | Crime Tracker</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,53 +56,84 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="_hot_.html">&quot;hot&quot;</a>
+					<a href="../modules/_components_searchbox_.html">&quot;components/SearchBox&quot;</a>
+				</li>
+				<li>
+					<a href="_components_searchbox_.isearchstate.html">ISearchState</a>
 				</li>
 			</ul>
-			<h1>External module &quot;hot&quot;</h1>
+			<h1>Interface ISearchState</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">ISearchState</span>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section tsd-is-not-exported">
-							<h3>Functions</h3>
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported"><a href="_hot_.html#render" class="tsd-kind-icon">render</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="_components_searchbox_.isearchstate.html#autocomplete" class="tsd-kind-icon">auto<wbr>Complete</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="_components_searchbox_.isearchstate.html#error" class="tsd-kind-icon">error</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="_components_searchbox_.isearchstate.html#region" class="tsd-kind-icon">region</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="_components_searchbox_.isearchstate.html#searchstring" class="tsd-kind-icon">search<wbr>String</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
-				<h2>Functions</h2>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
-					<a name="render" class="tsd-anchor"></a>
-					<h3>render</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">render<span class="tsd-signature-symbol">(</span>Component<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/arlyon/portal/blob/6a15c67/front/hot.tsx#L7">hot.tsx:7</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>Component: <span class="tsd-signature-type">any</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="autocomplete" class="tsd-anchor"></a>
+					<h3>auto<wbr>Complete</h3>
+					<div class="tsd-signature tsd-kind-icon">auto<wbr>Complete<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/arlyon/portal/blob/6a15c67/front/components/SearchBox.tsx#L12">components/SearchBox.tsx:12</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="error" class="tsd-anchor"></a>
+					<h3>error</h3>
+					<div class="tsd-signature tsd-kind-icon">error<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/arlyon/portal/blob/6a15c67/front/components/SearchBox.tsx#L10">components/SearchBox.tsx:10</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="region" class="tsd-anchor"></a>
+					<h3>region</h3>
+					<div class="tsd-signature tsd-kind-icon">region<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/arlyon/portal/blob/6a15c67/front/components/SearchBox.tsx#L11">components/SearchBox.tsx:11</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="searchstring" class="tsd-anchor"></a>
+					<h3>search<wbr>String</h3>
+					<div class="tsd-signature tsd-kind-icon">search<wbr>String<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/arlyon/portal/blob/6a15c67/front/components/SearchBox.tsx#L9">components/SearchBox.tsx:9</a></li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -113,45 +144,69 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_app_.html">"app"</a>
+						<a href="../modules/_app_.html">"app"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_components_bikelist_.html">"components/<wbr>Bike<wbr>List"</a>
+						<a href="../modules/_components_bikelist_.html">"components/<wbr>Bike<wbr>List"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_components_crime_.html">"components/<wbr>Crime"</a>
+						<a href="../modules/_components_crime_.html">"components/<wbr>Crime"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_components_postcodedata_.html">"components/<wbr>Post<wbr>Code<wbr>Data"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="_components_searchbox_.html">"components/<wbr>Search<wbr>Box"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="_config_.html">"config"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="_data_postcodes_.html">"data/postcodes"</a>
+						<a href="../modules/_components_postcodedata_.html">"components/<wbr>Post<wbr>Code<wbr>Data"</a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="_hot_.html">"hot"</a>
+						<a href="../modules/_components_searchbox_.html">"components/<wbr>Search<wbr>Box"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_interfaces_address_.html">"interfaces/<wbr>Address"</a>
+						<a href="../modules/_config_.html">"config"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_interfaces_crimeatlocation_.html">"interfaces/<wbr>Crime<wbr>AtLocation"</a>
+						<a href="../modules/_data_postcodes_.html">"data/postcodes"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_interfaces_neighbourhood_.html">"interfaces/<wbr>Neighbourhood"</a>
+						<a href="../modules/_hot_.html">"hot"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_interfaces_address_.html">"interfaces/<wbr>Address"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_interfaces_crimeatlocation_.html">"interfaces/<wbr>Crime<wbr>AtLocation"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_interfaces_neighbourhood_.html">"interfaces/<wbr>Neighbourhood"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="_hot_.html#render" class="tsd-kind-icon">render</a>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="../classes/_components_searchbox_.searchbox.html" class="tsd-kind-icon">Search<wbr>Box</a>
 					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="_components_searchbox_.isearchprops.html" class="tsd-kind-icon">ISearch<wbr>Props</a>
+					</li>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_components_searchbox_.isearchstate.html" class="tsd-kind-icon">ISearch<wbr>State</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="_components_searchbox_.isearchstate.html#autocomplete" class="tsd-kind-icon">auto<wbr>Complete</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="_components_searchbox_.isearchstate.html#error" class="tsd-kind-icon">error</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="_components_searchbox_.isearchstate.html#region" class="tsd-kind-icon">region</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="_components_searchbox_.isearchstate.html#searchstring" class="tsd-kind-icon">search<wbr>String</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
 				</ul>
 			</nav>
 		</div>
