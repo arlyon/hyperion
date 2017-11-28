@@ -1,7 +1,7 @@
 import datetime
 import peewee as pw
 
-from models.base import BaseModel
+from back.models.base import BaseModel
 
 
 class Bike(BaseModel):

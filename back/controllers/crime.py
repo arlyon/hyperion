@@ -2,6 +2,7 @@ import requests
 from flask import jsonify
 
 from back import app
+from back.models.tools import get_postcode_mapping
 
 
 @app.route('/api/crime/<string:postcode>')  # assign function to specified route

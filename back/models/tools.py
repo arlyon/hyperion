@@ -123,11 +123,11 @@ def should_update_bikes():
 def most_recent_bike() -> Bike or None:
     try:
         return Bike.select().order_by(Bike.cached_date.desc()).get()
-    except DoesNotExist as e:
+    except DoesNotExist:
         return None
 
 
-def get_bikes_from_db(postcode: str, range=10) -> List[Bike] or None:
+def get_bikes_from_db(postcode: str, radius=10) -> List[Bike] or None:
 
     if should_update_bikes():
         get_and_cache_from_server()
@@ -135,7 +135,7 @@ def get_bikes_from_db(postcode: str, range=10) -> List[Bike] or None:
     mapping = get_postcode_mapping(postcode)
 
     start = geopy.Point(mapping.lat, mapping.long)
-    distance = geopy.distance.vincenty(kilometers=range*1.6)
+    distance = geopy.distance.vincenty(kilometers=radius * 1.6)
 
     lat_end = distance.destination(point=start, bearing=0).latitude
     lat_start = distance.destination(point=start, bearing=180).latitude
@@ -160,12 +160,12 @@ def get_and_cache_from_server():
     soup = BeautifulSoup(request.text, 'html.parser')
 
     token = soup.find("input", {"name": "_token"}).get('value')
-    XSRF_TOKEN = request.cookies["XSRF-TOKEN"]
+    xsrf_token = request.cookies["XSRF-TOKEN"]
     laravel_session = request.cookies["laravel_session"]
 
     # __cfduid, cart_identifier, locale, XSRF-TOKEN, laravel_session
     headers = {
-        'cookie': f'XSRF-TOKEN={XSRF_TOKEN}; laravel_session={laravel_session}',
+        'cookie': f'XSRF-TOKEN={xsrf_token}; laravel_session={laravel_session}',
         'origin': 'https://www.bikeregister.com',
         'accept-encoding': 'gzip, deflate, br',
         'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
