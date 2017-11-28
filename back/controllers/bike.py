@@ -1,7 +1,7 @@
 from flask import jsonify
 
 from back import app
-from models.tools import get_bikes_from_db
+from back.models.tools import get_bikes_from_db
 
 
 @app.route('/api/bikes/<string:postcode>')
