@@ -1,3 +1,5 @@
+import feedparser
+
 import requests
 from flask import jsonify
 from back import app
@@ -44,3 +46,11 @@ def get_neighbourhood(postcode):
     """
     neighbourhood = get_neighbourhood_from_db(postcode)
     return jsonify(neighbourhood.serialize()) if neighbourhood is not None else (jsonify(message="No Police Data"), 404)
+
+@app.route('/api/rss/<string:twitterHandle>')
+def twitterFeed(twitterHandle):
+    feed = feedparser.parse(f"http://twitrss.me/twitter_user_to_rss/?user={twitterHandle}")
+    for x in feed.entries:
+        x["image"] = feed.feed["image"]["href"]
+    return jsonify(feed.entries)
+
