@@ -72,7 +72,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>PostCodeData shows data about a specific location.</p>
+						<p>Given a postcode, lists data about the local area.</p>
 					</div>
 				</div>
 			</section>
@@ -136,14 +136,14 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Post<wbr>Code<wbr>Data<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_components_postcodedata_.postcodedata.html" class="tsd-signature-type">PostCodeData</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Post<wbr>Code<wbr>Data<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">: </span><a href="../interfaces/_components_postcodedata_.ipostcodedataprops.html" class="tsd-signature-type">IPostCodeDataProps</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_components_postcodedata_.postcodedata.html" class="tsd-signature-type">PostCodeData</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides Component.__constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/arlyon/portal/blob/f807529/front/components/PostCodeData.tsx#L28">components/PostCodeData.tsx:28</a></li>
+									<li>Defined in <a href="https://github.com/arlyon/portal/blob/700a2b1/front/components/PostCodeData.tsx#L34">components/PostCodeData.tsx:34</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -154,17 +154,12 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>props: <span class="tsd-signature-type">object</span></h5>
+									<h5>props: <a href="../interfaces/_components_postcodedata_.ipostcodedataprops.html" class="tsd-signature-type">IPostCodeDataProps</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>The properties for the component.</p>
 										</div>
 									</div>
-									<ul class="tsd-parameters">
-										<li class="tsd-parameter">
-											<h5>postcode<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
-										</li>
-									</ul>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_components_postcodedata_.postcodedata.html" class="tsd-signature-type">PostCodeData</a></h4>
@@ -239,7 +234,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/arlyon/portal/blob/f807529/front/components/PostCodeData.tsx#L53">components/PostCodeData.tsx:53</a></li>
+									<li>Defined in <a href="https://github.com/arlyon/portal/blob/700a2b1/front/components/PostCodeData.tsx#L59">components/PostCodeData.tsx:59</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -253,6 +248,7 @@
 								<li>
 									<h5>nextProps: <span class="tsd-signature-type">any</span></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>The next props.</p>
 									</div>
 								</li>
 							</ul>
@@ -270,7 +266,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/arlyon/portal/blob/f807529/front/components/PostCodeData.tsx#L73">components/PostCodeData.tsx:73</a></li>
+									<li>Defined in <a href="https://github.com/arlyon/portal/blob/700a2b1/front/components/PostCodeData.tsx#L77">components/PostCodeData.tsx:77</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -323,7 +319,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/arlyon/portal/blob/f807529/front/components/PostCodeData.tsx#L83">components/PostCodeData.tsx:83</a></li>
+									<li>Defined in <a href="https://github.com/arlyon/portal/blob/700a2b1/front/components/PostCodeData.tsx#L87">components/PostCodeData.tsx:87</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -358,7 +354,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides Component.render</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/arlyon/portal/blob/f807529/front/components/PostCodeData.tsx#L100">components/PostCodeData.tsx:100</a></li>
+									<li>Defined in <a href="https://github.com/arlyon/portal/blob/700a2b1/front/components/PostCodeData.tsx#L104">components/PostCodeData.tsx:104</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -743,6 +739,12 @@
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_interfaces_address_.html">"interfaces/<wbr>Address"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_interfaces_biketheft_.html">"interfaces/<wbr>Bike<wbr>Theft"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_interfaces_crime_.html">"interfaces/<wbr>Crime"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_interfaces_crimeatlocation_.html">"interfaces/<wbr>Crime<wbr>AtLocation"</a>

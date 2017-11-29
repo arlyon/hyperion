@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>IPostCodeDataProps | Crime Tracker</title>
+	<title>IBikeTheft | Crime Tracker</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_components_postcodedata_.html">&quot;components/PostCodeData&quot;</a>
+					<a href="../modules/_interfaces_biketheft_.html">&quot;interfaces/BikeTheft&quot;</a>
 				</li>
 				<li>
-					<a href="_components_postcodedata_.ipostcodedataprops.html">IPostCodeDataProps</a>
+					<a href="_interfaces_biketheft_.ibiketheft.html">IBikeTheft</a>
 				</li>
 			</ul>
-			<h1>Interface IPostCodeDataProps</h1>
+			<h1>Interface IBikeTheft</h1>
 		</div>
 	</div>
 </header>
@@ -72,7 +72,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>The props for postcode data.</p>
+						<p>An instance of bike theft.</p>
 					</div>
 				</div>
 			</section>
@@ -80,7 +80,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">IPostCodeDataProps</span>
+						<span class="target">IBikeTheft</span>
 					</li>
 				</ul>
 			</section>
@@ -91,7 +91,15 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_components_postcodedata_.ipostcodedataprops.html#postcode" class="tsd-kind-icon">postcode</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_biketheft_.ibiketheft.html#colour" class="tsd-kind-icon">colour</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_biketheft_.ibiketheft.html#description" class="tsd-kind-icon">description</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_biketheft_.ibiketheft.html#frame_number" class="tsd-kind-icon">frame_<wbr>number</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_biketheft_.ibiketheft.html#latitude" class="tsd-kind-icon">latitude</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_biketheft_.ibiketheft.html#longitude" class="tsd-kind-icon">longitude</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_biketheft_.ibiketheft.html#make" class="tsd-kind-icon">make</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_biketheft_.ibiketheft.html#model" class="tsd-kind-icon">model</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_biketheft_.ibiketheft.html#reported_at" class="tsd-kind-icon">reported_<wbr>at</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_biketheft_.ibiketheft.html#rfid" class="tsd-kind-icon">rfid</a></li>
 							</ul>
 						</section>
 					</div>
@@ -100,12 +108,92 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="postcode" class="tsd-anchor"></a>
-					<h3>postcode</h3>
-					<div class="tsd-signature tsd-kind-icon">postcode<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="colour" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> colour</h3>
+					<div class="tsd-signature tsd-kind-icon">colour<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/arlyon/portal/blob/700a2b1/front/components/PostCodeData.tsx#L19">components/PostCodeData.tsx:19</a></li>
+							<li>Defined in <a href="https://github.com/arlyon/portal/blob/700a2b1/front/interfaces/BikeTheft.ts#L7">interfaces/BikeTheft.ts:7</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="description" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> description</h3>
+					<div class="tsd-signature tsd-kind-icon">description<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/arlyon/portal/blob/700a2b1/front/interfaces/BikeTheft.ts#L12">interfaces/BikeTheft.ts:12</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="frame_number" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> frame_<wbr>number</h3>
+					<div class="tsd-signature tsd-kind-icon">frame_<wbr>number<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/arlyon/portal/blob/700a2b1/front/interfaces/BikeTheft.ts#L10">interfaces/BikeTheft.ts:10</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="latitude" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> latitude</h3>
+					<div class="tsd-signature tsd-kind-icon">latitude<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/arlyon/portal/blob/700a2b1/front/interfaces/BikeTheft.ts#L8">interfaces/BikeTheft.ts:8</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="longitude" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> longitude</h3>
+					<div class="tsd-signature tsd-kind-icon">longitude<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/arlyon/portal/blob/700a2b1/front/interfaces/BikeTheft.ts#L9">interfaces/BikeTheft.ts:9</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="make" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> make</h3>
+					<div class="tsd-signature tsd-kind-icon">make<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/arlyon/portal/blob/700a2b1/front/interfaces/BikeTheft.ts#L5">interfaces/BikeTheft.ts:5</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="model" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> model</h3>
+					<div class="tsd-signature tsd-kind-icon">model<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/arlyon/portal/blob/700a2b1/front/interfaces/BikeTheft.ts#L6">interfaces/BikeTheft.ts:6</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="reported_at" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> reported_<wbr>at</h3>
+					<div class="tsd-signature tsd-kind-icon">reported_<wbr>at<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/arlyon/portal/blob/700a2b1/front/interfaces/BikeTheft.ts#L13">interfaces/BikeTheft.ts:13</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="rfid" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> rfid</h3>
+					<div class="tsd-signature tsd-kind-icon">rfid<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/arlyon/portal/blob/700a2b1/front/interfaces/BikeTheft.ts#L11">interfaces/BikeTheft.ts:11</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -132,7 +220,7 @@
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_components_message_.html">"components/<wbr>Message"</a>
 					</li>
-					<li class="current tsd-kind-external-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_components_postcodedata_.html">"components/<wbr>Post<wbr>Code<wbr>Data"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -153,7 +241,7 @@
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_interfaces_address_.html">"interfaces/<wbr>Address"</a>
 					</li>
-					<li class=" tsd-kind-external-module">
+					<li class="current tsd-kind-external-module">
 						<a href="../modules/_interfaces_biketheft_.html">"interfaces/<wbr>Bike<wbr>Theft"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -169,30 +257,42 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="../classes/_components_postcodedata_.policeinfo.html" class="tsd-kind-icon">Police<wbr>Info</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/_components_postcodedata_.postcodedata.html" class="tsd-kind-icon">Post<wbr>Code<wbr>Data</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="_components_postcodedata_.ipostcodedataprops.html" class="tsd-kind-icon">IPost<wbr>Code<wbr>Data<wbr>Props</a>
+						<a href="_interfaces_biketheft_.ibiketheft.html" class="tsd-kind-icon">IBike<wbr>Theft</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_components_postcodedata_.ipostcodedataprops.html#postcode" class="tsd-kind-icon">postcode</a>
+								<a href="_interfaces_biketheft_.ibiketheft.html#colour" class="tsd-kind-icon">colour</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_interfaces_biketheft_.ibiketheft.html#description" class="tsd-kind-icon">description</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_interfaces_biketheft_.ibiketheft.html#frame_number" class="tsd-kind-icon">frame_<wbr>number</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_interfaces_biketheft_.ibiketheft.html#latitude" class="tsd-kind-icon">latitude</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_interfaces_biketheft_.ibiketheft.html#longitude" class="tsd-kind-icon">longitude</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_interfaces_biketheft_.ibiketheft.html#make" class="tsd-kind-icon">make</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_interfaces_biketheft_.ibiketheft.html#model" class="tsd-kind-icon">model</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_interfaces_biketheft_.ibiketheft.html#reported_at" class="tsd-kind-icon">reported_<wbr>at</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_interfaces_biketheft_.ibiketheft.html#rfid" class="tsd-kind-icon">rfid</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="_components_postcodedata_.ipostcodedatastate.html" class="tsd-kind-icon">IPost<wbr>Code<wbr>Data<wbr>State</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="../modules/_components_postcodedata_.html#localinfo" class="tsd-kind-icon">Local<wbr>Info</a>
-					</li>
 				</ul>
 			</nav>
 		</div>
