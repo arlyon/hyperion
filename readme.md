@@ -1,7 +1,8 @@
 # portal
 
-## Report
+## Report / demo resources
 - [Click here to view/edit report](https://docs.google.com/document/d/1NSfq18kf0ULAA4pPGV_NvUkAlWMVCDpIF-dHX-H96T4/edit?usp=sharing)
+- [Data overview image](https://i.imgur.com/Y7xNo29.png)
 
 ## useful articles
 
