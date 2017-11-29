@@ -4,3 +4,5 @@ venv/
 back/static/app\.*
 
 *.pyc
+
+data\.db
