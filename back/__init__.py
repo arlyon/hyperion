@@ -7,14 +7,10 @@ app = Flask('project', template_folder='back/templates', static_folder='back/sta
 
 # if running on heroku
 if 'DYNO' in os.environ:
-    print("Running App in Production Mode")
-    sys.stdout.flush()
     SSLify(app)
     app.debug = False
-    app.config = os.environ.get('FLASK_KEY')
+    app.config['SECRET_KEY'] = os.environ.get('FLASK_KEY')
 else:
-    print("Running App in Debug Mode")
-    sys.stdout.flush()
     app.debug = True
     app.config['SECRET_KEY'] = 'dev'
 
