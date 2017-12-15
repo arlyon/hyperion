@@ -6,11 +6,10 @@ app = Flask('project', template_folder='back/templates', static_folder='back/sta
 
 # if running on heroku
 if 'DYNO' in os.environ:
-    SSLify(app)
     app.debug = False
     app.config = os.environ.get('FLASK_KEY')
 else:
-    app.debug = False
+    app.debug = True
     app.config['SECRET_KEY'] = 'dev'
 
 from back.controllers import *
