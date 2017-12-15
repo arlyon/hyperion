@@ -6,3 +6,5 @@ back/static/app\.*
 *.pyc
 
 data\.db
+
+*.db-journal
