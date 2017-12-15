@@ -1,9 +1,16 @@
 from flask import Flask
-from flask_cors import CORS
+from flask_sslify import SSLify
+import os
 
 app = Flask('project', template_folder='back/templates', static_folder='back/static')
-CORS(app)
-app.config['SECRET_KEY'] = 'secret'
-app.debug = True
+
+# if running on heroku
+if 'DYNO' in os.environ:
+    SSLify(app)
+    app.debug = False
+    app.config = os.environ.get('FLASK_KEY')
+else:
+    app.debug = False
+    app.config['SECRET_KEY'] = 'dev'
 
 from back.controllers import *
