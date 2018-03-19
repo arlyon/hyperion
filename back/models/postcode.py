@@ -1,5 +1,6 @@
-from playhouse.shortcuts import model_to_dict
 import peewee as pw
+from playhouse.shortcuts import model_to_dict
+
 from back.models.base import BaseModel
 from back.models.neighbourhood import Neighbourhood
 
@@ -14,7 +15,7 @@ class PostCodeMapping(BaseModel):
     country = pw.CharField()
     district = pw.CharField()
     zone = pw.CharField()
-    neighbourhood = pw.ForeignKeyField(Neighbourhood, null=True)
+    neighbourhood = pw.ForeignKeyField(Neighbourhood, null=True, related_name="postcodes")
 
     def serialize(self):
         return model_to_dict(self, exclude=[PostCodeMapping.id])

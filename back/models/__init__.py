@@ -1,6 +1,7 @@
-from peewee import SqliteDatabase
 import glob
 import os
+
+from peewee import SqliteDatabase
 
 db = SqliteDatabase('data.db')
 db.connect()
