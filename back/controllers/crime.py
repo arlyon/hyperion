@@ -2,7 +2,7 @@ import requests
 from flask import jsonify
 
 from back import app
-from models.util import get_postcode, get_neighbourhood
+from back.models.util import get_postcode, get_neighbourhood
 
 
 @app.route('/api/crime/<string:postcode>')

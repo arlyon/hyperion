@@ -14,3 +14,4 @@ else:
     app.debug = True
     app.config['SECRET_KEY'] = 'dev'
 
+from back.controllers import *

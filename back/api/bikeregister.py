@@ -6,8 +6,8 @@ import brotli
 import requests
 from bs4 import BeautifulSoup
 
-from api import ApiError
-from models import Bike
+from back.api import ApiError
+from back.models import Bike
 
 
 def get_new_bikes_from_api() -> List[Bike]:

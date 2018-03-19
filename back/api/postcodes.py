@@ -3,8 +3,8 @@ from json import JSONDecodeError
 
 import requests
 
-from api import ApiError
-from models import PostCodeMapping
+from back.api import ApiError
+from back.models import PostCodeMapping
 
 
 def get_postcode_from_api(postcode: str) -> PostCodeMapping or None:

@@ -5,12 +5,11 @@ import geopy
 import geopy.distance
 from peewee import DoesNotExist
 
-from api import ApiError
-from api.bikeregister import get_new_bikes_from_api
-from api.police import get_neighbourhood_from_api
-from api.postcodes import get_postcode_from_api
-from back.models.bikes import Bike
-from models import PostCodeMapping, Neighbourhood, db, Location, Link
+from back.api import ApiError
+from back.api.bikeregister import get_new_bikes_from_api
+from back.api.police import get_neighbourhood_from_api
+from back.api.postcodes import get_postcode_from_api
+from back.models import PostCodeMapping, Neighbourhood, db, Location, Link, Bike
 
 
 def should_update_bikes():

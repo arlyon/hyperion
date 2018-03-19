@@ -4,8 +4,8 @@ from typing import Tuple, List
 
 import requests
 
-from api import ApiError
-from models import Neighbourhood, Link, Location, PostCodeMapping
+from back.api import ApiError
+from back.models import Neighbourhood, Link, Location, PostCodeMapping
 
 
 def get_neighbourhood_from_api(mapping: PostCodeMapping) -> Tuple[Neighbourhood or None, List[Location] or None, List[Link] or None]:
