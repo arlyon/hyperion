@@ -1,5 +1,6 @@
 import peewee as pw
 from playhouse.shortcuts import model_to_dict
+
 from back.models.base import BaseModel
 
 
@@ -17,14 +18,15 @@ class Neighbourhood(BaseModel):
 
     def serialize(self):
         data = model_to_dict(self, backrefs=True)
-        data["links"] = data.pop("link_set")
-        data["locations"] = data.pop("location_set")
-        data.pop("postcodemapping_set")
+        data["links"] = data.pop("links")
+        data["locations"] = data.pop("locations")
+        data.pop("postcodes")
         return data
 
 
 class Link(BaseModel):
     name = pw.CharField()
     url = pw.CharField()
-    neighbourhood = pw.ForeignKeyField(Neighbourhood)
+    neighbourhood = pw.ForeignKeyField(Neighbourhood, related_name="links")
+
 

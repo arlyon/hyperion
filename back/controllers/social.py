@@ -5,7 +5,7 @@ from back import app
 
 
 @app.route('/api/rss/<handle>')
-def twitter_feed(handle):
+def api_twitter(handle):
     """
     Gets the twitter feed from a given handle.
     :param handle: The twitter handle to find.
