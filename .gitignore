@@ -8,3 +8,5 @@ back/static/app\.*
 data\.db
 
 *.db-journal
+
+docs/
