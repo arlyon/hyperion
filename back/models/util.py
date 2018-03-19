@@ -41,7 +41,9 @@ def get_stolen_bikes(postcode: str, kilometers=10) -> List[Bike] or None:
     if should_update_bikes():
         try:
             new_bikes = get_new_bikes_from_api()
-            Bike.insert_many(new_bikes).execute()
+            with db.atomic():
+                for bike in new_bikes:
+                    bike.save()
         except ApiError:
             pass
 
@@ -113,9 +115,13 @@ def get_neighbourhood(postcode: str) -> Neighbourhood or None:
             return None
 
         if neighbourhood is not None:
-            with db.atomic() as transaction:
+            with db.atomic():
                 neighbourhood.save()
-                Location.insert_many(locations)
-                Link.insert_many(links)
+                mapping.neighbourhood = neighbourhood
+                mapping.save()
+                for location in locations:
+                    location.save()
+                for link in links:
+                    link.save()
 
         return neighbourhood

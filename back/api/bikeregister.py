@@ -74,7 +74,6 @@ def get_new_bikes_from_api() -> List[Bike]:
 
     new_bikes = [
         Bike(
-            id=index,
             make=bike["make"],
             model=bike["model"],
             colour=bike["colour"],

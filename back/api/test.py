@@ -3,7 +3,7 @@ import unittest
 from api.bikeregister import get_new_bikes_from_api
 from api.police import get_neighbourhood_from_api
 from api.postcodes import get_postcode_from_api
-from models import PostCodeMapping
+from models.util import get_postcode
 
 
 class TestPostcodeApi(unittest.TestCase):
@@ -30,7 +30,7 @@ class TestPoliceApi(unittest.TestCase):
         Makes sure the function runs without errors.
         :return:
         """
-        postcode = PostCodeMapping.get(PostCodeMapping.postcode == "EH47BL")
+        postcode = get_postcode("EH47BL")
         neighbourhood = get_neighbourhood_from_api(postcode)
 
 
@@ -45,3 +45,4 @@ class TestBikeRegisterApi(unittest.TestCase):
         :return:
         """
         bikes = get_new_bikes_from_api()
+        self.assertIsInstance(bikes, list)
