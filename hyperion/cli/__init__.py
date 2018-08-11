@@ -64,12 +64,17 @@ async def cli(postcode_strings: Tuple[str], bikes: bool, crime: bool, nearby: bo
         data = {}
         try:
             postcode = await get_postcode(postcode_str)
-            data["location"] = postcode.serialize()
-            coordinates = geopy.Point(postcode.lat, postcode.long)
-        except CachingError as e:
+            if postcode is None:
+                logger.error(f"Invalid Postcode - {Fore.GREEN}{postcode_str}{Fore.RESET}")
+                success = False
+                continue
+        except CachingError:
             logger.error("Could not get postcode.")
             success = False
             continue
+        else:
+            data["location"] = postcode.serialize()
+            coordinates = geopy.Point(postcode.lat, postcode.long)
 
         if bikes:
             try:
@@ -96,5 +101,8 @@ async def cli(postcode_strings: Tuple[str], bikes: bool, crime: bool, nearby: bo
 
         postcodes[data['location']['postcode']] = data
 
-    await (display_json(postcodes) if as_json else display_human(postcodes))
-    return 0 if success else 1
+    if success:
+        await (display_json(postcodes) if as_json else display_human(postcodes))
+        return 0
+    else:
+        return 1

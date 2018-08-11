@@ -1,5 +1,4 @@
 import asyncio
-import logging
 from datetime import timedelta, datetime
 from typing import List, Optional
 
@@ -13,9 +12,8 @@ from hyperion.fetch import ApiError
 from hyperion.fetch.bikeregister import fetch_bikes
 from hyperion.fetch.police import fetch_neighbourhood
 from hyperion.fetch.postcode import fetch_postcode
-from hyperion.models import PostCode, Neighbourhood, db, Bike
 from hyperion.models import CachingError, PostCodeLike
-
+from hyperion.models import PostCode, Neighbourhood, db, Bike
 
 
 async def update_bikes(delta: Optional[timedelta] = None):
@@ -40,10 +38,13 @@ async def update_bikes(delta: Optional[timedelta] = None):
                     Bike.from_dict(bike) for index, bike in enumerate(bike_data)
                     if index > (most_recent_bike.id if most_recent_bike is not None else -1)
                 )
+
+                counter = 0
                 with db.atomic():
                     for bike in new_bikes:
                         bike.save()
-                logger.info(f"Saved {len(new_bikes)} new entries.")
+                        counter += 1
+                logger.info(f"Saved {counter} new entries.")
         else:
             logger.info("Bike data up to date.")
 

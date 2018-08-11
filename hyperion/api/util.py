@@ -20,9 +20,6 @@ postcode_regex = re.compile("^([Gg][Ii][Rr] 0[Aa]{2})|"
 async def normalize_postcode_middleware(request, handler):
     """
     If there is a postcode in the url it validates and normalizes it.
-    :param request:
-    :param handler:
-    :return:
     """
     postcode: Optional[str] = request.match_info.get('postcode', None)
 
