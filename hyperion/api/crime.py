@@ -3,11 +3,11 @@ from typing import Optional
 from aiohttp import web
 from pybreaker import CircuitBreakerError
 
-from back.fetch import ApiError
-from back.fetch.police import fetch_crime
-from back.models import PostCode, CachingError
+from hyperion.fetch import ApiError
+from hyperion.fetch.police import fetch_crime
+from hyperion.models import PostCode, CachingError
 from .util import str_json_response
-from back.models.util import get_postcode, get_neighbourhood
+from hyperion.models.util import get_postcode, get_neighbourhood
 
 
 async def api_crime(request):
@@ -26,7 +26,7 @@ async def api_crime(request):
     try:
         crime = await fetch_crime(postcode.lat, postcode.long)
     except (ApiError, CircuitBreakerError):
-        raise web.HTTPInternalServerError(body=f"Requested crime is not cached, and we could not find any information about it.")
+        raise web.HTTPInternalServerError(body=f"Requested crime is not cached, and can't be retrieved.")
 
     if crime is None:
         return web.HTTPNotFound(body="No Police Data")
@@ -45,9 +45,9 @@ async def api_neighbourhood(request):
     try:
         neighbourhood = await get_neighbourhood(postcode)
     except CachingError as e:
-        return web.Response(body=e.status, status=500)
+        raise web.HTTPInternalServerError(text=e.status)
 
     if neighbourhood is None:
-        return web.Response(body="No Police Data", status=404)
+        raise web.HTTPNotFound(text="No Police Data")
     else:
         return str_json_response(neighbourhood.serialize())

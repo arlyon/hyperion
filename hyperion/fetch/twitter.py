@@ -7,7 +7,9 @@ import aiohttp
 import feedparser
 from pybreaker import CircuitBreaker
 
-from back.fetch import ApiError
+from hyperion import logger
+from hyperion.fetch import ApiError
+
 
 twitrss_breaker = CircuitBreaker(3, timedelta(hours=1))
 
@@ -26,7 +28,7 @@ async def fetch_twitter(handle: str) -> List:
             async with session.get(f"http://twitrss.me/twitter_user_to_rss/?user={handle}") as request:
                 text = await request.text()
         except aiohttp.ClientConnectionError as con_err:
-            logging.error(f"Could not connect to {con_err.host}")
+            logger.error(f"Could not connect to {con_err.host}")
             raise ApiError(f"Could not connect to {con_err.host}")
         else:
             feed = feedparser.parse(text)

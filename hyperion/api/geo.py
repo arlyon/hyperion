@@ -3,11 +3,11 @@ from typing import Optional
 from aiohttp import web
 from pybreaker import CircuitBreakerError
 
-from back.fetch import ApiError
-from back.fetch.wikipedia import fetch_nearby
-from back.models import PostCode, CachingError
+from hyperion.fetch import ApiError
+from hyperion.fetch.wikipedia import fetch_nearby
+from hyperion.models import PostCode, CachingError
 from .util import str_json_response
-from back.models.util import get_postcode
+from hyperion.models.util import get_postcode
 
 
 async def api_postcode(request):
@@ -40,22 +40,22 @@ async def api_nearby(request):
     try:
         limit = int(request.match_info.get('limit', 10))
     except ValueError:
-        return web.HTTPBadRequest(body="Invalid limit.")
+        raise web.HTTPBadRequest(text="Invalid Limit")
 
     try:
         postcode: Optional[PostCode] = await get_postcode(postcode)
     except CachingError as e:
-        return web.HTTPInternalServerError(body=e.status)
+        raise web.HTTPInternalServerError(body=e.status)
 
     if postcode is None:
-        return web.HTTPNotFound(body="Invalid Postcode")
+        raise web.HTTPNotFound(text="Invalid Postcode")
 
     try:
         nearby_items = await fetch_nearby(postcode.lat, postcode.long, limit)
-    except ApiError as e:
-        return web.HTTPInternalServerError(body=f"No nearby locations cached, and we could not find any information about it.")
+    except ApiError:
+        return web.HTTPInternalServerError(text=f"No nearby locations cached, and can't be retrieved.")
 
     if nearby_items is None:
-        return web.HTTPNotFound(body="No Results")
+        raise web.HTTPNotFound(text="No Results")
     else:
         return str_json_response(nearby_items)

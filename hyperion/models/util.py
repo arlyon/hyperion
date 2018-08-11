@@ -8,28 +8,31 @@ import geopy.distance
 from peewee import DoesNotExist
 from pybreaker import CircuitBreakerError
 
-from back.fetch import ApiError
-from back.fetch.bikeregister import fetch_bikes
-from back.fetch.police import fetch_neighbourhood
-from back.fetch.postcode import fetch_postcode
-from back.models import PostCode, Neighbourhood, db, Bike
-from back.models import CachingError, PostCodeLike
+from hyperion import logger
+from hyperion.fetch import ApiError
+from hyperion.fetch.bikeregister import fetch_bikes
+from hyperion.fetch.police import fetch_neighbourhood
+from hyperion.fetch.postcode import fetch_postcode
+from hyperion.models import PostCode, Neighbourhood, db, Bike
+from hyperion.models import CachingError, PostCodeLike
 
 
-async def update_bikes(delta: timedelta):
+
+async def update_bikes(delta: Optional[timedelta] = None):
     """
     A background task that retrieves bike data.
     :param delta: The amount of time to wait between checks.
     """
-    while True:
-        logging.info("Fetching bike data.")
+
+    async def update(delta: timedelta):
+        logger.info("Fetching bike data.")
         if await should_update_bikes(delta):
             try:
                 bike_data = await fetch_bikes()
             except ApiError:
-                logging.error(f"Failed to fetch bikes.")
+                logger.error(f"Failed to fetch bikes.")
             except CircuitBreakerError:
-                logging.error(f"Failed to fetch bikes (circuit breaker open).")
+                logger.error(f"Failed to fetch bikes (circuit breaker open).")
             else:
                 # save only bikes that aren't in the db
                 most_recent_bike = Bike.get_most_recent_bike()
@@ -40,11 +43,16 @@ async def update_bikes(delta: timedelta):
                 with db.atomic():
                     for bike in new_bikes:
                         bike.save()
-                logging.info(f"Saved {len(new_bikes)} new entries.")
+                logger.info(f"Saved {len(new_bikes)} new entries.")
         else:
-            logging.info("Bike data up to date. Sleeping.")
+            logger.info("Bike data up to date.")
 
-        await asyncio.sleep(delta.total_seconds())
+    if delta is None:
+        await update(timedelta(days=1000))
+    else:
+        while True:
+            await update(delta)
+            await asyncio.sleep(delta.total_seconds())
 
 
 async def should_update_bikes(delta: timedelta):

@@ -1,7 +1,7 @@
 from aiohttp import web
 
-from back.fetch import ApiError
-from back.fetch.twitter import fetch_twitter
+from hyperion.fetch import ApiError
+from hyperion.fetch.twitter import fetch_twitter
 from .util import str_json_response
 
 
@@ -12,10 +12,10 @@ async def api_twitter(request):
     """
     handle = request.match_info.get('handle', None)
     if handle is None:
-        return web.Response(body="Not found.", status=404)
+        raise web.HTTPNotFound(body="Not found.")
 
     try:
         posts = await fetch_twitter(handle)
     except ApiError as e:
-        return web.Response(body=e.status, status=500)
+        raise web.HTTPInternalServerError(body=e.status)
     return str_json_response(posts)

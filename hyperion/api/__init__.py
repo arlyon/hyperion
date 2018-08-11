@@ -11,7 +11,7 @@ from .bike import api_bikes
 from .crime import api_crime, api_neighbourhood
 from .geo import api_postcode, api_nearby
 from .social import api_twitter
-from back.models.util import update_bikes
+from hyperion.models.util import update_bikes
 
 
 async def start_background_tasks(app):

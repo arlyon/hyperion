@@ -1,14 +1,8 @@
 .idea/
-node_modules/
-venv/
-back/static/app\.*
-
 *.pyc
-
 data\.db
-
 *.db-journal
-
 docs/
 todo
 .DS_Store
+*.egg-info

@@ -2,9 +2,9 @@ from typing import Optional
 
 from aiohttp import web
 
-from back.models.util import get_bikes
-from back.models import CachingError
-from back.api.util import str_json_response
+from hyperion.models.util import get_bikes
+from hyperion.models import CachingError
+from hyperion.api.util import str_json_response
 
 
 async def api_bikes(request):
@@ -18,14 +18,14 @@ async def api_bikes(request):
     try:
         radius = int(request.match_info.get('radius', 10))
     except ValueError:
-        raise web.HTTPBadRequest(body="Invalid radius.")
+        raise web.HTTPBadRequest(text="Invalid Radius")
 
     try:
         bikes = await get_bikes(postcode, radius)
     except CachingError as e:
-        return web.HTTPInternalServerError(text=e.status)
+        raise web.HTTPInternalServerError(text=e.status)
     else:
         if bikes is None:
-            return web.HTTPNotFound(text="Post code does not exist.")
+            raise web.HTTPNotFound(text="Post code does not exist.")
         else:
             return str_json_response([bike.serialize() for bike in bikes])

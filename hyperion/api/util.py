@@ -8,7 +8,12 @@ from aiohttp.web import json_response, middleware
 
 str_dumps = partial(dumps, default=str)
 str_json_response = partial(json_response, dumps=str_dumps)
-postcode_regex = re.compile("^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z])))) {0,1}[0-9][A-Za-z]{2})$")
+postcode_regex = re.compile("^([Gg][Ii][Rr] 0[Aa]{2})|"
+                            "((([A-Za-z][0-9]{1,2})|"
+                            "(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|"
+                            "(([A-Za-z][0-9][A-Za-z])|"
+                            "([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z])))) ?"
+                            "[0-9][A-Za-z]{2})$")
 
 
 @middleware
@@ -21,14 +26,10 @@ async def normalize_postcode_middleware(request, handler):
     """
     postcode: Optional[str] = request.match_info.get('postcode', None)
 
-    if postcode is None:
-        return await handler(request)
-
-    if not postcode_regex.match(postcode):
-        return web.Response(body="Invalid Postcode", status=404)
+    if postcode is None or not postcode_regex.match(postcode):
+        raise web.HTTPNotFound(text="Invalid Postcode")
 
     postcode_processed = postcode.upper().replace(" ", "")
-
     if postcode_processed == postcode:
         return await handler(request)
     else:

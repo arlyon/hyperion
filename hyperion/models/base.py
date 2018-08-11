@@ -1,7 +1,7 @@
 from peewee import Model
 from playhouse.shortcuts import model_to_dict
 
-from back.models import db
+from hyperion.models import db
 
 
 class BaseModel(Model):
