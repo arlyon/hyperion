@@ -11,7 +11,7 @@ from hyperion import logger
 from hyperion.fetch import ApiError
 from hyperion.fetch.bikeregister import fetch_bikes
 from hyperion.fetch.police import fetch_neighbourhood
-from hyperion.fetch.postcode import fetch_postcode
+from hyperion.fetch.postcode import fetch_postcode_from_string, fetch_postcode_random
 from hyperion.models import CachingError, PostCodeLike
 from hyperion.models import PostCode, Neighbourhood, db, Bike
 
@@ -114,6 +114,22 @@ async def get_bikes(postcode: PostCodeLike, kilometers=10) -> Optional[List[Bike
     ]
 
 
+async def get_postcode_random() -> PostCode:
+    """
+    Gets a random postcode object..
+    Acts as a middleware between us and the API, caching results.
+    :return: The PostCode object else None if the postcode does not exist.
+    """
+    try:
+        postcode = await fetch_postcode_random()
+    except (ApiError, CircuitBreakerError):
+        raise CachingError(f"Requested postcode is not cached, and can't be retrieved.")
+
+    if postcode is not None:
+        postcode.save()
+    return postcode
+
+
 async def get_postcode(postcode: PostCodeLike) -> Optional[PostCode]:
     """
     Gets the postcode object for a given postcode string.
@@ -131,12 +147,12 @@ async def get_postcode(postcode: PostCodeLike) -> Optional[PostCode]:
         postcode = PostCode.get(PostCode.postcode == postcode)
     except DoesNotExist:
         try:
-            postcode = await fetch_postcode(postcode)
+            postcode = await fetch_postcode_from_string(postcode)
         except (ApiError, CircuitBreakerError):
-            raise CachingError(f"Requested postcode is not cached, and we could not get any information about it.")
+            raise CachingError(f"Requested postcode is not cached, and can't be retrieved.")
         if postcode is not None:
             postcode.save()
-    else:
+    finally:
         return postcode
 
 

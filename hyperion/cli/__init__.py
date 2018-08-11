@@ -5,13 +5,15 @@ from typing import Tuple, Dict
 import geopy.distance
 from click import echo
 from colorama import Fore
+from geopy import Point
+from geopy.distance import vincenty
 
 from hyperion import logger
 from hyperion.fetch import ApiError
 from hyperion.fetch.police import fetch_crime
 from hyperion.fetch.wikipedia import fetch_nearby
 from hyperion.models import CachingError
-from hyperion.models.util import get_postcode, get_bikes
+from hyperion.models.util import get_postcode, get_bikes, get_postcode_random
 
 
 async def display_json(postcodes: Dict[str, Dict]):
@@ -46,63 +48,73 @@ async def display_human(postcodes: Dict[str, Dict]):
                 echo(f"    {x['dist']}m - {x['title']}")
 
 
-async def cli(postcode_strings: Tuple[str], bikes: bool, crime: bool, nearby: bool, as_json: bool):
+async def cli(postcode_strings: Tuple[str], random_postcodes: int, bikes: bool, crime: bool, nearby: bool,
+              as_json: bool):
     """
     Runs the CLI app.
+    Tries to execute as many steps as possible to give the user
+    the best understanding of the errors (if there are any).
 
+    :param postcode_strings: A list of desired postcodes.
+    :param random_postcodes: A number of random postcodes.
     :param bikes: A flag to include bikes.
     :param crime: A flag to include crime.
     :param nearby: A flag to include nearby.
     :param as_json: A flag to make json output.
-    :param postcode_strings: The desired postcode.
     """
+    postcode_data = {}
+    postcode_coroutines = [(postcode, get_postcode(postcode)) for postcode in postcode_strings] + \
+                          [(None, get_postcode_random()) for _ in range(random_postcodes)]
 
-    postcodes = {}
-    success = True
-
-    for postcode_str in postcode_strings:
-        data = {}
+    for string, coroutine in postcode_coroutines:
         try:
-            postcode = await get_postcode(postcode_str)
-            if postcode is None:
-                logger.error(f"Invalid Postcode - {Fore.GREEN}{postcode_str}{Fore.RESET}")
-                success = False
-                continue
+            postcode = await coroutine
         except CachingError:
-            logger.error("Could not get postcode.")
-            success = False
-            continue
+            postcode = None
+
+        if postcode is None:
+            logger.error("Could not get postcode" + ("." if string is None else f' "{string}"'))
         else:
-            data["location"] = postcode.serialize()
-            coordinates = geopy.Point(postcode.lat, postcode.long)
+            postcode_data[postcode.postcode] = postcode
+
+    if len(postcode_data) != len(postcode_strings) + random_postcodes:
+        return 1
+
+    success = True
+    for string, postcode in postcode_data.items():
+        data = {"location": postcode.serialize()}
+        coordinates = geopy.Point(postcode.lat, postcode.long)
 
         if bikes:
             try:
                 data["bikes"] = [bike.serialize() for bike in await get_bikes(postcode.postcode)]
-                for bike in data["bikes"]:
-                    bike["distance"] = floor(geopy.distance.vincenty(geopy.Point(bike['latitude'], bike['longitude']),
-                                                                     coordinates).kilometers * 1000)
-                data["bikes"] = sorted(data["bikes"], key=lambda bike: bike["distance"])
             except CachingError as e:
                 success = False
                 echo(e)
+            else:
+                for bike in data["bikes"]:
+                    point = Point(bike['latitude'], bike['longitude'])
+                    bike["distance"] = floor(vincenty(point, coordinates).kilometers * 1000)
+                data["bikes"] = sorted(data["bikes"], key=lambda bike: bike["distance"])
+
         if crime:
             try:
-                data["crimes"] = await fetch_crime(postcode.lat, postcode.long)
+                data["crimes"] = await fetch_crime(coordinates.latitude, coordinates.longitude)
             except ApiError as e:
                 success = False
                 echo(e)
+
         if nearby:
             try:
-                data["nearby"] = await fetch_nearby(postcode.lat, postcode.long)
+                data["nearby"] = await fetch_nearby(coordinates.latitude, coordinates.longitude)
             except ApiError as e:
                 success = False
                 echo(e)
 
-        postcodes[data['location']['postcode']] = data
+        postcode_data[string] = data
 
     if success:
-        await (display_json(postcodes) if as_json else display_human(postcodes))
+        await (display_json(postcode_data) if as_json else display_human(postcode_data))
         return 0
     else:
         return 1

@@ -15,7 +15,7 @@ class PostCode(BaseModel):
     long = pw.FloatField()
     country = pw.CharField()
     district = pw.CharField()
-    zone = pw.CharField()
+    zone = pw.CharField(null=True)
     neighbourhood = pw.ForeignKeyField(Neighbourhood, null=True, related_name="postcodes")
 
     def serialize(self):

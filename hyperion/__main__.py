@@ -13,6 +13,7 @@ from .models import util
 
 @click.command()
 @click.argument('postcodes', required=False, nargs=-1)
+@click.option('--random', '-r', count=True)
 @click.option('--bikes', '-b', is_flag=True)
 @click.option('--crime', '-c', is_flag=True)
 @click.option('--nearby', '-n', is_flag=True)
@@ -21,11 +22,12 @@ from .models import util
 @click.option('--api-server', '-a', is_flag=True)
 @click.option('--port', '-p', type=int, default=8000)
 @click.option('--verbose', '-v', count=True)
-def run(postcodes, bikes, crime, nearby, json, update_bikes, api_server, port, verbose):
+def run(postcodes, random, bikes, crime, nearby, json, update_bikes, api_server, port, verbose):
     """
     Runs the program.
 
     :param postcodes: The postcode to search.
+    :param random: The number of random postcodes to include.
     :param bikes: Includes a list of stolen bikes in that area.
     :param crime: Includes a list of committed crimes in that area.
     :param nearby: Includes a list of wikipedia articles in that area.
@@ -49,8 +51,8 @@ def run(postcodes, bikes, crime, nearby, json, update_bikes, api_server, port, v
             web.run_app(app, host='0.0.0.0', port=port)
         except asyncio.CancelledError:
             click.echo("Goodbye!")
-    elif len(postcodes) > 0:
-        exit(loop.run_until_complete(cli(postcodes, bikes, crime, nearby, json)))
+    elif len(postcodes) > 0 or random > 0:
+        exit(loop.run_until_complete(cli(postcodes, random, bikes, crime, nearby, json)))
     else:
         click.echo(Fore.RED + "Either include a post code, or the --api-server flag.")
 
