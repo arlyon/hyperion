@@ -6,8 +6,8 @@ from pybreaker import CircuitBreakerError
 from hyperion.fetch import ApiError
 from hyperion.fetch.police import fetch_crime
 from hyperion.models import PostCode, CachingError
+from hyperion.models.util import get_postcode, get_neighbourhood, get_postcode_random
 from .util import str_json_response
-from hyperion.models.util import get_postcode, get_neighbourhood
 
 
 async def api_crime(request):
@@ -19,7 +19,8 @@ async def api_crime(request):
     postcode: Optional[str] = request.match_info.get('postcode', None)
 
     try:
-        postcode: Optional[PostCode] = await get_postcode(postcode)
+        coroutine = get_postcode_random() if postcode == "random" else get_postcode(postcode)
+        postcode: Optional[PostCode] = await coroutine
     except CachingError as e:
         return web.Response(body=e.status, status=500)
 
@@ -43,6 +44,7 @@ async def api_neighbourhood(request):
     postcode: Optional[str] = request.match_info.get('postcode', None)
 
     try:
+        postcode = (await get_postcode_random()) if postcode == "random" else postcode
         neighbourhood = await get_neighbourhood(postcode)
     except CachingError as e:
         raise web.HTTPInternalServerError(text=e.status)

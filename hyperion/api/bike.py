@@ -2,9 +2,9 @@ from typing import Optional
 
 from aiohttp import web
 
-from hyperion.models.util import get_bikes
-from hyperion.models import CachingError
 from hyperion.api.util import str_json_response
+from hyperion.models import CachingError
+from hyperion.models.util import get_bikes, get_postcode_random
 
 
 async def api_bikes(request):
@@ -21,6 +21,7 @@ async def api_bikes(request):
         raise web.HTTPBadRequest(text="Invalid Radius")
 
     try:
+        postcode = (await get_postcode_random()) if postcode == "random" else postcode
         bikes = await get_bikes(postcode, radius)
     except CachingError as e:
         raise web.HTTPInternalServerError(text=e.status)

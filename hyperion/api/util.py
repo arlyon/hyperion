@@ -1,7 +1,7 @@
+import re
 from functools import partial
 from json import dumps
 from typing import Optional
-import re
 
 from aiohttp import web
 from aiohttp.web import json_response, middleware
@@ -23,7 +23,9 @@ async def normalize_postcode_middleware(request, handler):
     """
     postcode: Optional[str] = request.match_info.get('postcode', None)
 
-    if postcode is None or not postcode_regex.match(postcode):
+    if postcode is None or postcode == "random":
+        return await handler(request)
+    elif not postcode_regex.match(postcode):
         raise web.HTTPNotFound(text="Invalid Postcode")
 
     postcode_processed = postcode.upper().replace(" ", "")
