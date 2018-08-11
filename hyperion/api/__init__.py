@@ -3,15 +3,12 @@ from datetime import timedelta
 from aiohttp import web
 from aiohttp.web_middlewares import normalize_path_middleware
 
-import asyncio
-import uvloop
-
-from .util import normalize_postcode_middleware
+from hyperion.models.util import update_bikes
 from .bike import api_bikes
 from .crime import api_crime, api_neighbourhood
 from .geo import api_postcode, api_nearby
 from .social import api_twitter
-from hyperion.models.util import update_bikes
+from .util import normalize_postcode_middleware
 
 
 async def start_background_tasks(app):
@@ -23,7 +20,6 @@ async def cleanup_background_tasks(app):
     await app['bike_fetcher']
 
 
-asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 app = web.Application(middlewares=[normalize_path_middleware(), normalize_postcode_middleware])
 
 app.on_startup.append(start_background_tasks)

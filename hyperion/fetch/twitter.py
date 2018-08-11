@@ -1,15 +1,12 @@
-import logging
 from datetime import timedelta
 from typing import List
 
 import aiohttp
-
 import feedparser
 from pybreaker import CircuitBreaker
 
 from hyperion import logger
-from hyperion.fetch import ApiError
-
+from . import ApiError
 
 twitrss_breaker = CircuitBreaker(3, timedelta(hours=1))
 

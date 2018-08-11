@@ -2,9 +2,9 @@ from typing import Optional
 
 from aiohttp import web
 
-from hyperion.api.util import str_json_response
 from hyperion.models import CachingError
 from hyperion.models.util import get_bikes, get_postcode_random
+from .util import str_json_response
 
 
 async def api_bikes(request):

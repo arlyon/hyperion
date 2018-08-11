@@ -2,13 +2,16 @@ import asyncio
 import logging
 
 import click
+import uvloop
 from aiohttp import web
 from colorama import Fore
 
-from hyperion import logger
+from . import logger
 from .api import app
 from .cli import cli
 from .models import util
+
+asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 
 @click.command()

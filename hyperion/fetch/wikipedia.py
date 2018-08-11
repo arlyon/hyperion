@@ -1,4 +1,3 @@
-import logging
 from json import JSONDecodeError
 from typing import Dict, List, Optional
 
@@ -6,8 +5,7 @@ import aiohttp
 from pybreaker import CircuitBreaker
 
 from hyperion import logger
-from hyperion.fetch import ApiError
-
+from . import ApiError
 
 wikipedia_breaker = CircuitBreaker()
 

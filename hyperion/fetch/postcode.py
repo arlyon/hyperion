@@ -6,8 +6,8 @@ import aiohttp
 from pybreaker import CircuitBreaker
 
 from hyperion import logger
-from hyperion.fetch import ApiError
 from hyperion.models import PostCode
+from . import ApiError
 
 # todo add pytest
 

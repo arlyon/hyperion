@@ -6,7 +6,7 @@ import aiohttp
 from pybreaker import CircuitBreaker
 
 from hyperion import logger
-from hyperion.fetch import ApiError
+from . import ApiError
 
 police_breaker = CircuitBreaker(fail_max=3, timeout_duration=timedelta(hours=1))
 

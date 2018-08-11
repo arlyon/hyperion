@@ -1,14 +1,13 @@
 import json
 from datetime import timedelta
 from typing import List
-from xml import etree
 
 import aiohttp
 from lxml.html import document_fromstring
 from pybreaker import CircuitBreaker
 
 from hyperion import logger
-from hyperion.fetch import ApiError
+from . import ApiError
 
 bike_breaker = CircuitBreaker(fail_max=3, timeout_duration=timedelta(days=3))
 

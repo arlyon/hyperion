@@ -2,8 +2,8 @@ import asyncio
 from datetime import timedelta, datetime
 from typing import List, Optional
 
-import geopy
-import geopy.distance
+from geopy import Point
+from geopy.distance import vincenty
 from peewee import DoesNotExist
 from pybreaker import CircuitBreakerError
 
@@ -12,9 +12,7 @@ from hyperion.fetch import ApiError
 from hyperion.fetch.bikeregister import fetch_bikes
 from hyperion.fetch.police import fetch_neighbourhood
 from hyperion.fetch.postcode import fetch_postcode_from_string, fetch_postcode_random
-from hyperion.models import CachingError, PostCodeLike
-from hyperion.models import PostCode, Neighbourhood, db, Bike
-from models import Location, Link
+from . import CachingError, PostCodeLike, PostCode, Neighbourhood, db, Bike, Location, Link
 
 
 async def update_bikes(delta: Optional[timedelta] = None):
@@ -92,8 +90,8 @@ async def get_bikes(postcode: PostCodeLike, kilometers=10) -> Optional[List[Bike
         return None
 
     # create point and distance
-    center = geopy.Point(postcode.lat, postcode.long)
-    distance = geopy.distance.vincenty(kilometers=kilometers)
+    center = Point(postcode.lat, postcode.long)
+    distance = vincenty(kilometers=kilometers)
 
     # calculate edges of a square and retrieve
     lat_end = distance.destination(point=center, bearing=0).latitude
@@ -111,7 +109,7 @@ async def get_bikes(postcode: PostCodeLike, kilometers=10) -> Optional[List[Bike
     # filter out items in square that aren't within the radius and return
     return [
         bike for bike in bikes_in_area
-        if geopy.distance.vincenty(geopy.Point(bike.latitude, bike.longitude), center).kilometers < kilometers
+        if vincenty(Point(bike.latitude, bike.longitude), center).kilometers < kilometers
     ]
 
 
