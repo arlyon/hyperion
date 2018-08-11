@@ -45,7 +45,10 @@ def run(postcodes, bikes, crime, nearby, json, update_bikes, api_server, port, v
         loop.run_until_complete(util.update_bikes())
 
     if api_server:
-        web.run_app(app, host='0.0.0.0', port=port)
+        try:
+            web.run_app(app, host='0.0.0.0', port=port)
+        except asyncio.CancelledError:
+            pass
     elif len(postcodes) > 0:
         exit(loop.run_until_complete(cli(postcodes, bikes, crime, nearby, json)))
     else:
