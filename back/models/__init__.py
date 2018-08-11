@@ -1,15 +1,22 @@
-import glob
-import os
+from typing import Union
 
 from peewee import SqliteDatabase
+
+from back.fetch import ApiError
 
 db = SqliteDatabase('data.db')
 db.connect()
 
-from back.models.bikes import Bike
-from back.models.location import Location
+from back.models.bike import Bike
+from back.models.neighbourhood import Location
 from back.models.neighbourhood import Neighbourhood, Link
-from back.models.postcode import PostCodeMapping
+from back.models.postcode import PostCode
 
-db.create_tables([Neighbourhood, Bike, Location, Link, PostCodeMapping], safe=True)
-__all__ = [os.path.basename(f)[:-3] for f in glob.glob(os.path.dirname(__file__) + "/*.py")]
+db.create_tables([Neighbourhood, Bike, Location, Link, PostCode], safe=True)
+
+
+class CachingError(ApiError):
+    pass
+
+
+PostCodeLike = Union[PostCode, str]

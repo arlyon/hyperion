@@ -1,18 +1,53 @@
-import datetime
-from typing import List
+import asyncio
+import logging
+from datetime import timedelta, datetime
+from typing import List, Optional
 
 import geopy
 import geopy.distance
 from peewee import DoesNotExist
+from pybreaker import CircuitBreakerError
 
-from back.api import ApiError
-from back.api.bikeregister import get_new_bikes_from_api
-from back.api.police import get_neighbourhood_from_api
-from back.api.postcodes import get_postcode_from_api
-from back.models import PostCodeMapping, Neighbourhood, db, Location, Link, Bike
+from back.fetch import ApiError
+from back.fetch.bikeregister import fetch_bikes
+from back.fetch.police import fetch_neighbourhood
+from back.fetch.postcode import fetch_postcode
+from back.models import PostCode, Neighbourhood, db, Bike
+from back.models import CachingError, PostCodeLike
 
 
-def should_update_bikes():
+async def update_bikes(delta: timedelta):
+    """
+    A background task that retrieves bike data.
+    :param delta: The amount of time to wait between checks.
+    """
+    while True:
+        logging.info("Fetching bike data.")
+        if await should_update_bikes(delta):
+            try:
+                bike_data = await fetch_bikes()
+            except ApiError:
+                logging.error(f"Failed to fetch bikes.")
+            except CircuitBreakerError:
+                logging.error(f"Failed to fetch bikes (circuit breaker open).")
+            else:
+                # save only bikes that aren't in the db
+                most_recent_bike = Bike.get_most_recent_bike()
+                new_bikes = (
+                    Bike.from_dict(bike) for index, bike in enumerate(bike_data)
+                    if index > (most_recent_bike.id if most_recent_bike is not None else -1)
+                )
+                with db.atomic():
+                    for bike in new_bikes:
+                        bike.save()
+                logging.info(f"Saved {len(new_bikes)} new entries.")
+        else:
+            logging.info("Bike data up to date. Sleeping.")
+
+        await asyncio.sleep(delta.total_seconds())
+
+
+async def should_update_bikes(delta: timedelta):
     """
     Checks the most recently cached bike and returns true if
     it either doesn't exist or
@@ -22,12 +57,12 @@ def should_update_bikes():
     """
     bike = Bike.get_most_recent_bike()
     if bike is not None:
-        return bike.cached_date < datetime.datetime.now() - datetime.timedelta(days=7)
+        return bike.cached_date < datetime.now() - delta
     else:
         return True
 
 
-def get_stolen_bikes(postcode: str, kilometers=10) -> List[Bike] or None:
+async def get_bikes(postcode: PostCodeLike, kilometers=10) -> Optional[List[Bike]]:
     """
     Gets stolen bikes from the database within a
     certain radius (km) of a given postcode. Selects
@@ -35,22 +70,19 @@ def get_stolen_bikes(postcode: str, kilometers=10) -> List[Bike] or None:
     the corners of the square.
     :param postcode: The postcode to look up.
     :param kilometers: The radius (km) of the search.
-    :return: The bikes in that radius.
+    :return: The bikes in that radius or None if the postcode doesn't exist.
     """
 
-    if should_update_bikes():
-        try:
-            new_bikes = get_new_bikes_from_api()
-            with db.atomic():
-                for bike in new_bikes:
-                    bike.save()
-        except ApiError:
-            pass
+    try:
+        postcode = await get_postcode(postcode)
+    except CachingError as e:
+        raise e
 
-    mapping = get_postcode(postcode)
+    if postcode is None:
+        return None
 
     # create point and distance
-    center = geopy.Point(mapping.lat, mapping.long)
+    center = geopy.Point(postcode.lat, postcode.long)
     distance = geopy.distance.vincenty(kilometers=kilometers)
 
     # calculate edges of a square and retrieve
@@ -73,55 +105,67 @@ def get_stolen_bikes(postcode: str, kilometers=10) -> List[Bike] or None:
     ]
 
 
-def get_postcode(postcode: str) -> PostCodeMapping or None:
+async def get_postcode(postcode: PostCodeLike) -> Optional[PostCode]:
     """
-    Gets the postcode mapping for a given postcode.
+    Gets the postcode object for a given postcode string.
     Acts as a middleware between us and the API, caching results.
-    :param postcode: The postcode.
-    :return: the Mapping.
+    :param postcode: The either a string postcode or PostCode object.
+    :return: The PostCode object else None if the postcode does not exist..
+    :raises CachingError: When the postcode is not in cache, and the API is unreachable.
     """
-    postcode = postcode.replace(" ", "")
+    if isinstance(postcode, PostCode):
+        return postcode
+
+    postcode = postcode.replace(" ", "").upper()
+
     try:
-        return PostCodeMapping.get(PostCodeMapping.postcode == postcode)
+        postcode = PostCode.get(PostCode.postcode == postcode)
     except DoesNotExist:
         try:
-            mapping = get_postcode_from_api(postcode)
-        except ApiError:
-            return None
+            postcode = await fetch_postcode(postcode)
+        except (ApiError, CircuitBreakerError):
+            raise CachingError(f"Requested postcode is not cached, and we could not get any information about it.")
+        if postcode is not None:
+            postcode.save()
+    else:
+        return postcode
 
-        if mapping is not None:
-            mapping.save()
 
-        return mapping
-
-
-def get_neighbourhood(postcode: str) -> Neighbourhood or None:
+async def get_neighbourhood(postcode: PostCodeLike) -> Optional[Neighbourhood]:
     """
     Gets a police neighbourhood from the database.
     Acts as a middleware between us and the API, caching results.
     :param postcode: The UK postcode to look up.
-    :return: The Neighbourhood or None if not found.
+    :return: The Neighbourhood or None if the postcode does not exist.
+    :raises CachingError: If the needed neighbourhood is not in cache, and the fetch isn't responding.
+
+    todo save locations/links
     """
-    postcode = postcode.replace(" ", "")
-    mapping = get_postcode(postcode)
-    if mapping is None:
-        return None
-    elif mapping.neighbourhood is not None:
-        return mapping.neighbourhood
+    try:
+        postcode = await get_postcode(postcode)
+    except CachingError as e:
+        raise e
     else:
-        try:
-            neighbourhood, locations, links = get_neighbourhood_from_api(mapping)
-        except ApiError:
+        if postcode is None:
             return None
+        elif postcode.neighbourhood is not None:
+            return postcode.neighbourhood
 
-        if neighbourhood is not None:
-            with db.atomic():
-                neighbourhood.save()
-                mapping.neighbourhood = neighbourhood
-                mapping.save()
-                for location in locations:
-                    location.save()
-                for link in links:
-                    link.save()
+    try:
+        data = await fetch_neighbourhood(postcode.lat, postcode.long)
+    except ApiError as e:
+        raise CachingError(f"Neighbourhood not in cache, and could not reach API: {e.status}")
 
-        return neighbourhood
+    if data is not None:
+        neighbourhood = Neighbourhood.from_dict(data)
+
+        with db.atomic():
+            neighbourhood.save()
+            postcode.neighbourhood = neighbourhood
+            postcode.save()
+            for location in locations:
+                location.save()
+            for link in links:
+                link.save()
+
+    return neighbourhood
