@@ -4,8 +4,10 @@ from typing import List
 from xml import etree
 
 import aiohttp
+from lxml.html import document_fromstring
 from pybreaker import CircuitBreaker
 
+from hyperion import logger
 from hyperion.fetch import ApiError
 
 bike_breaker = CircuitBreaker(fail_max=3, timeout_duration=timedelta(days=3))
@@ -26,12 +28,16 @@ async def fetch_bikes() -> List[dict]:
     async with aiohttp.ClientSession() as session:
         try:
             async with session.get('https://www.bikeregister.com/stolen-bikes') as request:
-                soup = etree.fromstring(await request.text())
+                document = document_fromstring(await request.text())
         except aiohttp.ClientConnectionError as con_err:
             logger.error(f"Could not connect to {con_err.host}")
             raise ApiError(f"Could not connect to {con_err.host}")
 
-        token = soup.find("input", {"name": "_token"}).get('value')
+        token = document.xpath("//input[@name='_token']")
+        if len(token) != 1:
+            raise ApiError(f"Couldn't extract token from page.")
+        else:
+            token = token[0].value
         xsrf_token = request.cookies["XSRF-TOKEN"]
         laravel_session = request.cookies["laravel_session"]
 

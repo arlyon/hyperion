@@ -23,7 +23,8 @@ setup(
         'peewee',
         'geopy',
         'lxml',
-        'feedparser'
+        'feedparser',
+        'brotlipy'
     ],
     entry_points='''
         [console_scripts]
