@@ -37,4 +37,4 @@ async def normalize_postcode_middleware(request, handler):
         url = request.app.router[url_name]
         params = dict(request.match_info)
         params['postcode'] = postcode_processed
-        raise web.HTTPFound(str(url.url_for(**params)))
+        raise web.HTTPMovedPermanently(str(url.url_for(**params)))

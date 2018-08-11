@@ -24,7 +24,7 @@ async def cleanup_background_tasks(app):
 
 
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
-app = web.Application(middlewares=[normalize_postcode_middleware, normalize_path_middleware()])
+app = web.Application(middlewares=[normalize_path_middleware(), normalize_postcode_middleware])
 
 app.on_startup.append(start_background_tasks)
 app.on_cleanup.append(cleanup_background_tasks)
