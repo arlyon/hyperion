@@ -19,11 +19,13 @@ async def fetch_neighbourhood(lat: float, long: float) -> Optional[dict]:
     :raise ApiError: When there was an error connecting to the API.
     """
 
-    lookup_url = f"https://data.police.uk/fetch/locate-neighbourhood?q={lat},{long}"
+    lookup_url = f"https://data.police.uk/api/locate-neighbourhood?q={lat},{long}"
 
     async with aiohttp.ClientSession() as session:
         try:
             async with session.get(lookup_url) as request:
+                if request.status == 404:
+                    return None
                 neighbourhood = await request.json()
         except aiohttp.ClientConnectionError as con_err:
             logger.error(f"Could not connect to {con_err.host}")
@@ -32,7 +34,7 @@ async def fetch_neighbourhood(lat: float, long: float) -> Optional[dict]:
             logger.error(f"Could not decode data: {dec_err}")
             raise ApiError(f"Could not decode data: {dec_err}")
 
-        neighbourhood_url = f"https://data.police.uk/fetch/{neighbourhood['force']}/{neighbourhood['neighbourhood']}"
+        neighbourhood_url = f"https://data.police.uk/api/{neighbourhood['force']}/{neighbourhood['neighbourhood']}"
 
         try:
             async with session.get(neighbourhood_url) as request:
