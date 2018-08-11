@@ -1,5 +1,3 @@
-from typing import Iterable, Dict
-
 import peewee as pw
 from playhouse.shortcuts import model_to_dict
 
@@ -49,15 +47,12 @@ class Link(BaseModel):
     neighbourhood = pw.ForeignKeyField(Neighbourhood, related_name="links")
 
     @staticmethod
-    def from_dict(neighbourhood, data):
-        return [
-            Link(
-                name=link["title"],
-                url=link["url"],
-                neighbourhood=neighbourhood,
-            )
-            for link in data
-        ]
+    def from_dict(neighbourhood, link):
+        return Link(
+            name=link["title"],
+            url=link["url"],
+            neighbourhood=neighbourhood,
+        )
 
 
 class Location(BaseModel):
@@ -76,15 +71,14 @@ class Location(BaseModel):
     type = pw.CharField()
 
     @staticmethod
-    def from_dict(neighbourhood, data: Iterable[Dict]):
-        return (Location(
+    def from_dict(neighbourhood, postcode, location):
+        return Location(
             address=location["address"],
             description=location["description"],
             latitude=location["latitude"],
             longitude=location["longitude"],
             name=location["name"],
             neighbourhood=neighbourhood,
-            # postcode=postcode,
-            # todo sort out postcode saving
+            postcode=postcode,
             type=location["type"],
-        ) for location in data)
+        )

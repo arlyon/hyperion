@@ -14,6 +14,7 @@ from hyperion.fetch.police import fetch_neighbourhood
 from hyperion.fetch.postcode import fetch_postcode_from_string, fetch_postcode_random
 from hyperion.models import CachingError, PostCodeLike
 from hyperion.models import PostCode, Neighbourhood, db, Bike
+from models import Location, Link
 
 
 async def update_bikes(delta: Optional[timedelta] = None):
@@ -183,6 +184,8 @@ async def get_neighbourhood(postcode: PostCodeLike) -> Optional[Neighbourhood]:
 
     if data is not None:
         neighbourhood = Neighbourhood.from_dict(data)
+        locations = [Location.from_dict(neighbourhood, postcode, location) for location in data["locations"]]
+        links = [Link.from_dict(neighbourhood, link) for link in data["links"]]
 
         with db.atomic():
             neighbourhood.save()
@@ -192,5 +195,6 @@ async def get_neighbourhood(postcode: PostCodeLike) -> Optional[Neighbourhood]:
                 location.save()
             for link in links:
                 link.save()
-
+    else:
+        neighbourhood = None
     return neighbourhood
