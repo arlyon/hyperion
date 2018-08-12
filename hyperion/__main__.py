@@ -4,12 +4,13 @@ import logging
 import click
 import uvloop
 from aiohttp import web
+from click import Path
 from colorama import Fore
 
 from . import logger
 from .api import app
 from .cli import cli
-from .models import util
+from .models import util, initialize_database
 
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
@@ -24,8 +25,9 @@ asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 @click.option('--update-bikes', '-u', is_flag=True)
 @click.option('--api-server', '-a', is_flag=True)
 @click.option('--port', '-p', type=int, default=8000)
+@click.option('--db-path', type=Path(dir_okay=False))
 @click.option('--verbose', '-v', count=True)
-def run(postcodes, random, bikes, crime, nearby, json, update_bikes, api_server, port, verbose):
+def run(postcodes, random, bikes, crime, nearby, json, update_bikes, api_server, port, db_path, verbose):
     """
     Runs the program.
 
@@ -40,10 +42,13 @@ def run(postcodes, random, bikes, crime, nearby, json, update_bikes, api_server,
     :param port: Defines the port to run the rest api on.
     :param verbose: The verbosity.
     """
-    loop = asyncio.get_event_loop()
 
     log_levels = [logging.WARNING, logging.INFO, logging.DEBUG]
     logging.basicConfig(level=log_levels[min(verbose, 2)])
+
+    initialize_database(db_path)
+
+    loop = asyncio.get_event_loop()
 
     if update_bikes:
         logger.info("Force updating bikes.")

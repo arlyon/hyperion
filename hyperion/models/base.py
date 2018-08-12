@@ -1,7 +1,7 @@
-from peewee import Model, SqliteDatabase
+from peewee import Model, SqliteDatabase, Proxy
 from playhouse.shortcuts import model_to_dict
 
-from . import db
+database_proxy = Proxy()
 
 
 class BaseModel(Model):
@@ -13,4 +13,4 @@ class BaseModel(Model):
         return model_to_dict(self)
 
     class Meta:
-        database: SqliteDatabase = db
+        database: SqliteDatabase = database_proxy

@@ -2,17 +2,17 @@ import asyncio
 from datetime import timedelta, datetime
 from typing import List, Optional
 
+from aiobreaker import CircuitBreakerError
 from geopy import Point
 from geopy.distance import vincenty
 from peewee import DoesNotExist
-from pybreaker import CircuitBreakerError
 
 from hyperion import logger
 from hyperion.fetch import ApiError
 from hyperion.fetch.bikeregister import fetch_bikes
 from hyperion.fetch.police import fetch_neighbourhood
 from hyperion.fetch.postcode import fetch_postcode_from_string, fetch_postcode_random
-from . import CachingError, PostCodeLike, PostCode, Neighbourhood, db, Bike, Location, Link
+from . import CachingError, PostCodeLike, PostCode, Neighbourhood, Bike, Location, Link
 
 
 async def update_bikes(delta: Optional[timedelta] = None):
@@ -39,7 +39,7 @@ async def update_bikes(delta: Optional[timedelta] = None):
                 )
 
                 counter = 0
-                with db.atomic():
+                with Bike.Meta.database.atomic():
                     for bike in new_bikes:
                         bike.save()
                         counter += 1
@@ -145,7 +145,7 @@ async def get_postcode(postcode_like: PostCodeLike) -> Optional[PostCode]:
     postcode_like = postcode_like.replace(" ", "").upper()
 
     try:
-        postcode_like = PostCode.get(PostCode.postcode == postcode_like)
+        postcode = PostCode.get(PostCode.postcode == postcode_like)
     except DoesNotExist:
         try:
             postcode = await fetch_postcode_from_string(postcode_like)
@@ -153,8 +153,8 @@ async def get_postcode(postcode_like: PostCodeLike) -> Optional[PostCode]:
             raise CachingError(f"Requested postcode is not cached, and can't be retrieved.")
         if postcode is not None:
             postcode.save()
-    finally:
-        return postcode
+
+    return postcode
 
 
 async def get_neighbourhood(postcode_like: PostCodeLike) -> Optional[Neighbourhood]:
@@ -187,7 +187,7 @@ async def get_neighbourhood(postcode_like: PostCodeLike) -> Optional[Neighbourho
         locations = [Location.from_dict(neighbourhood, postcode, location) for location in data["locations"]]
         links = [Link.from_dict(neighbourhood, link) for link in data["links"]]
 
-        with db.atomic():
+        with Neighbourhood.Meta.database.atomic():
             neighbourhood.save()
             postcode.neighbourhood = neighbourhood
             postcode.save()

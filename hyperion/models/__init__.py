@@ -1,22 +1,24 @@
-from typing import Union
+from os.path import expanduser, join
+from typing import Union, Optional
 
 from peewee import SqliteDatabase
 
 from hyperion.fetch import ApiError
+from .base import database_proxy
+from .bike import Bike
+from .neighbourhood import Location, Neighbourhood, Link
+from .postcode import PostCode
 
-db: SqliteDatabase = SqliteDatabase('data.db')
-db.connect()
-
-from hyperion.models.bike import Bike  # noqa: E402
-from hyperion.models.neighbourhood import Location  # noqa: E402
-from hyperion.models.neighbourhood import Neighbourhood, Link  # noqa: E402
-from hyperion.models.postcode import PostCode  # noqa: E402
-
-db.create_tables([Neighbourhood, Bike, Location, Link, PostCode], safe=True)
+PostCodeLike = Union[PostCode, str]
 
 
 class CachingError(ApiError):
     pass
 
 
-PostCodeLike = Union[PostCode, str]
+def initialize_database(path: Optional[str]):
+    path = path if path is not None else join(expanduser("~"), '.hyperion.db')
+    database = SqliteDatabase(path)
+    database_proxy.initialize(database)
+    database.connect()
+    database.create_tables([Neighbourhood, Bike, Location, Link, PostCode], safe=True)
