@@ -1,4 +1,4 @@
-from peewee import Model
+from peewee import Model, SqliteDatabase
 from playhouse.shortcuts import model_to_dict
 
 from . import db
@@ -13,4 +13,4 @@ class BaseModel(Model):
         return model_to_dict(self)
 
     class Meta:
-        database = db  # specify the db to use
+        database: SqliteDatabase = db

@@ -82,12 +82,14 @@ async def get_bikes(postcode: PostCodeLike, kilometers=10) -> Optional[List[Bike
     """
 
     try:
-        postcode = await get_postcode(postcode)
+        postcode_opt = await get_postcode(postcode)
     except CachingError as e:
         raise e
 
-    if postcode is None:
+    if postcode_opt is None:
         return None
+    else:
+        postcode = postcode_opt
 
     # create point and distance
     center = Point(postcode.lat, postcode.long)
@@ -129,24 +131,24 @@ async def get_postcode_random() -> PostCode:
     return postcode
 
 
-async def get_postcode(postcode: PostCodeLike) -> Optional[PostCode]:
+async def get_postcode(postcode_like: PostCodeLike) -> Optional[PostCode]:
     """
     Gets the postcode object for a given postcode string.
     Acts as a middleware between us and the API, caching results.
-    :param postcode: The either a string postcode or PostCode object.
+    :param postcode_like: The either a string postcode or PostCode object.
     :return: The PostCode object else None if the postcode does not exist..
     :raises CachingError: When the postcode is not in cache, and the API is unreachable.
     """
-    if isinstance(postcode, PostCode):
-        return postcode
+    if isinstance(postcode_like, PostCode):
+        return postcode_like
 
-    postcode = postcode.replace(" ", "").upper()
+    postcode_like = postcode_like.replace(" ", "").upper()
 
     try:
-        postcode = PostCode.get(PostCode.postcode == postcode)
+        postcode_like = PostCode.get(PostCode.postcode == postcode_like)
     except DoesNotExist:
         try:
-            postcode = await fetch_postcode_from_string(postcode)
+            postcode = await fetch_postcode_from_string(postcode_like)
         except (ApiError, CircuitBreakerError):
             raise CachingError(f"Requested postcode is not cached, and can't be retrieved.")
         if postcode is not None:
@@ -155,7 +157,7 @@ async def get_postcode(postcode: PostCodeLike) -> Optional[PostCode]:
         return postcode
 
 
-async def get_neighbourhood(postcode: PostCodeLike) -> Optional[Neighbourhood]:
+async def get_neighbourhood(postcode_like: PostCodeLike) -> Optional[Neighbourhood]:
     """
     Gets a police neighbourhood from the database.
     Acts as a middleware between us and the API, caching results.
@@ -166,7 +168,7 @@ async def get_neighbourhood(postcode: PostCodeLike) -> Optional[Neighbourhood]:
     todo save locations/links
     """
     try:
-        postcode = await get_postcode(postcode)
+        postcode = await get_postcode(postcode_like)
     except CachingError as e:
         raise e
     else:

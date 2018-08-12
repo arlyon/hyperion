@@ -2,6 +2,7 @@ from json import JSONDecodeError
 from typing import Dict, List, Optional
 
 import aiohttp
+from aiohttp import ClientConnectionError
 from pybreaker import CircuitBreaker
 
 from hyperion import logger
@@ -32,7 +33,7 @@ async def fetch_nearby(lat: float, long: float, limit: int = 10) -> Optional[Lis
                     return None
                 data = (await request.json())["query"]["geosearch"]
 
-        except ConnectionError as con_err:
+        except ClientConnectionError as con_err:
             raise ApiError(f"Could not connect to {con_err.host}")
         except JSONDecodeError as dec_err:
             logger.error(f"Could not decode data: {dec_err}")

@@ -55,7 +55,7 @@ def run(postcodes, random, bikes, crime, nearby, json, update_bikes, api_server,
         except asyncio.CancelledError:
             click.echo("Goodbye!")
     elif len(postcodes) > 0 or random > 0:
-        exit(loop.run_until_complete(cli(postcodes, random, bikes, crime, nearby, json)))
+        exit(loop.run_until_complete(cli(postcodes, random, bikes=bikes, crime=crime, nearby=nearby, as_json=json)))
     else:
         click.echo(Fore.RED + "Either include a post code, or the --api-server flag.")
 

@@ -26,6 +26,14 @@ setup(
         'feedparser',
         'brotlipy'
     ],
+    tests_require=[
+        'pytest',
+        'pytest-picked',
+        'pytest-flake8',
+        'pytest-mypy',
+        'pytest-cov',
+        'hypothesis',
+    ],
     entry_points='''
         [console_scripts]
         hyperion=hyperion.__main__:run

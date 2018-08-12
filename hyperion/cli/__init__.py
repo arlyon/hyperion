@@ -1,6 +1,6 @@
 import json
 from math import floor
-from typing import Tuple, Dict
+from typing import Tuple, Dict, List, Optional, Coroutine
 
 import geopy.distance
 from click import echo
@@ -48,8 +48,9 @@ async def display_human(postcodes: Dict[str, Dict]):
                 echo(f"    {x['dist']}m - {x['title']}")
 
 
-async def cli(postcode_strings: Tuple[str], random_postcodes: int, bikes: bool, crime: bool, nearby: bool,
-              as_json: bool):
+async def cli(postcode_strings: Tuple[str], random_postcodes: int, *,
+              bikes: bool = False, crime: bool = False,
+              nearby: bool = False, as_json: bool = False):
     """
     Runs the CLI app.
     Tries to execute as many steps as possible to give the user
@@ -63,8 +64,11 @@ async def cli(postcode_strings: Tuple[str], random_postcodes: int, bikes: bool, 
     :param as_json: A flag to make json output.
     """
     postcode_data = {}
-    postcode_coroutines = [(postcode, get_postcode(postcode)) for postcode in postcode_strings] + \
-                          [(None, get_postcode_random()) for _ in range(random_postcodes)]
+    listed_postcode_coroutines: List[Tuple[Optional[str], Coroutine]] = \
+        [(postcode, get_postcode(postcode)) for postcode in postcode_strings]
+    random_postcode_coroutines: List[Tuple[Optional[str], Coroutine]] = \
+        [(None, get_postcode_random()) for _ in range(random_postcodes)]
+    postcode_coroutines = listed_postcode_coroutines + random_postcode_coroutines
 
     for string, coroutine in postcode_coroutines:
         try:
@@ -87,29 +91,31 @@ async def cli(postcode_strings: Tuple[str], random_postcodes: int, bikes: bool, 
 
         if bikes:
             try:
-                data["bikes"] = [bike.serialize() for bike in await get_bikes(postcode.postcode)]
-            except CachingError as e:
+                bikes_list = await get_bikes(postcode.postcode)
+            except CachingError:
                 success = False
-                echo(e)
+                echo("Could not get bikes.")
             else:
-                for bike in data["bikes"]:
-                    point = Point(bike['latitude'], bike['longitude'])
-                    bike["distance"] = floor(vincenty(point, coordinates).kilometers * 1000)
-                data["bikes"] = sorted(data["bikes"], key=lambda bike: bike["distance"])
+                if bikes_list is not None:
+                    data["bikes"] = [bike.serialize() for bike in bikes_list]
+                    for bike in data["bikes"]:
+                        point = Point(bike['latitude'], bike['longitude'])
+                        bike["distance"] = floor(vincenty(point, coordinates).kilometers * 1000)
+                    data["bikes"] = sorted(data["bikes"], key=lambda bike: bike["distance"])
 
         if crime:
             try:
                 data["crimes"] = await fetch_crime(coordinates.latitude, coordinates.longitude)
-            except ApiError as e:
+            except ApiError:
                 success = False
-                echo(e)
+                echo("No nearby crimes cached, and can't be retrieved.")
 
         if nearby:
             try:
                 data["nearby"] = await fetch_nearby(coordinates.latitude, coordinates.longitude)
-            except ApiError as e:
+            except ApiError:
                 success = False
-                echo(e)
+                echo("No nearby locations cached, and can't be retrieved.")
 
         postcode_data[string] = data
 
