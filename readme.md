@@ -1,12 +1,13 @@
 # Hyperion
 
 Hyperion is a CLI tool and rest api that facilitates searching for crime data
-at a specific post code in the UK.
+at specific geographical locations in the UK.
 
 ### Getting Started
 
 Simply pip install the package, and then get started with
 
+    pip install hyperion-cli
     hyperion --help
 
 ### Data
@@ -22,4 +23,5 @@ Data is aggregated and cached from the following sources:
 
 ### Web App
 
-A web app for interacting with this API is available as well.
+A [web app](https://github.com/arlyon/hyperion-web) for interacting
+with this API is available as well.
