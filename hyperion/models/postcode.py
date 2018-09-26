@@ -4,7 +4,7 @@ from playhouse.shortcuts import model_to_dict
 from .base import BaseModel
 
 
-class PostCode(BaseModel):
+class Postcode(BaseModel):
     """
     Maps a postcode to a lat and long.
     """
@@ -19,4 +19,4 @@ class PostCode(BaseModel):
     neighbourhood = pw.ForeignKeyField(Neighbourhood, null=True, related_name="postcodes")
 
     def serialize(self):
-        return model_to_dict(self, exclude=[PostCode.id])
+        return model_to_dict(self, exclude=[Postcode.id])

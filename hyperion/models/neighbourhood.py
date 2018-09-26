@@ -67,7 +67,7 @@ class Location(BaseModel):
     longitude = pw.FloatField(null=True)
     name = pw.CharField()
     neighbourhood = pw.ForeignKeyField(Neighbourhood, related_name="locations")
-    postcode = pw.ForeignKeyField(postcode.PostCode)
+    postcode = pw.ForeignKeyField(postcode.Postcode)
     type = pw.CharField()
 
     @staticmethod

@@ -12,7 +12,7 @@ from hyperion.fetch import ApiError
 from hyperion.fetch.bikeregister import fetch_bikes
 from hyperion.fetch.police import fetch_neighbourhood
 from hyperion.fetch.postcode import fetch_postcode_from_string, fetch_postcode_random
-from . import CachingError, PostCodeLike, PostCode, Neighbourhood, Bike, Location, Link
+from . import CachingError, PostCodeLike, Postcode, Neighbourhood, Bike, Location, Link
 
 
 async def update_bikes(delta: Optional[timedelta] = None):
@@ -115,7 +115,7 @@ async def get_bikes(postcode: PostCodeLike, kilometers=10) -> Optional[List[Bike
     ]
 
 
-async def get_postcode_random() -> PostCode:
+async def get_postcode_random() -> Postcode:
     """
     Gets a random postcode object..
     Acts as a middleware between us and the API, caching results.
@@ -131,7 +131,7 @@ async def get_postcode_random() -> PostCode:
     return postcode
 
 
-async def get_postcode(postcode_like: PostCodeLike) -> Optional[PostCode]:
+async def get_postcode(postcode_like: PostCodeLike) -> Optional[Postcode]:
     """
     Gets the postcode object for a given postcode string.
     Acts as a middleware between us and the API, caching results.
@@ -139,13 +139,13 @@ async def get_postcode(postcode_like: PostCodeLike) -> Optional[PostCode]:
     :return: The PostCode object else None if the postcode does not exist..
     :raises CachingError: When the postcode is not in cache, and the API is unreachable.
     """
-    if isinstance(postcode_like, PostCode):
+    if isinstance(postcode_like, Postcode):
         return postcode_like
 
     postcode_like = postcode_like.replace(" ", "").upper()
 
     try:
-        postcode = PostCode.get(PostCode.postcode == postcode_like)
+        postcode = Postcode.get(Postcode.postcode == postcode_like)
     except DoesNotExist:
         try:
             postcode = await fetch_postcode_from_string(postcode_like)

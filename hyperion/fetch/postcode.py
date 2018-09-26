@@ -6,7 +6,7 @@ import aiohttp
 from pybreaker import CircuitBreaker
 
 from hyperion import logger
-from hyperion.models import PostCode
+from hyperion.models import Postcode
 from . import ApiError
 
 # todo add pytest
@@ -60,7 +60,7 @@ async def fetch_postcode_from_string(postcode: str) -> Optional[PostCode]:
     return await get_from_url(postcode_lookup)
 
 
-async def fetch_postcode_from_coords(lat: float, long: float) -> Optional[PostCode]:
+async def fetch_postcodes_from_coordinates(lat: float, long: float) -> Optional[List[Postcode]]:
     """
     Gets a postcode object from the lat and long.
     :param lat: The latitude to look up.
@@ -73,7 +73,7 @@ async def fetch_postcode_from_coords(lat: float, long: float) -> Optional[PostCo
     return await get_from_url(postcode_lookup)
 
 
-async def fetch_postcode_random() -> PostCode:
+async def fetch_postcode_random() -> Postcode:
     """
     Gets a random postcode object.
     :raises ApiError: When there was an error connecting to the API.

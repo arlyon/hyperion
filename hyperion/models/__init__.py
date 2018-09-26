@@ -7,9 +7,9 @@ from hyperion.fetch import ApiError
 from .base import database_proxy
 from .bike import Bike
 from .neighbourhood import Location, Neighbourhood, Link
-from .postcode import PostCode
+from .postcode import Postcode
 
-PostCodeLike = Union[PostCode, str]
+PostCodeLike = Union[Postcode, str]
 
 
 class CachingError(ApiError):
@@ -21,4 +21,4 @@ def initialize_database(path: Optional[str]):
     database = SqliteDatabase(path)
     database_proxy.initialize(database)
     database.connect()
-    database.create_tables([Neighbourhood, Bike, Location, Link, PostCode], safe=True)
+    database.create_tables([Neighbourhood, Bike, Location, Link, Postcode], safe=True)
