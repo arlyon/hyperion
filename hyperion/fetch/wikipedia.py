@@ -3,7 +3,7 @@ from typing import Dict, List, Optional
 
 import aiohttp
 from aiohttp import ClientConnectionError
-from pybreaker import CircuitBreaker
+from aiobreaker import CircuitBreaker
 
 from hyperion import logger
 from . import ApiError

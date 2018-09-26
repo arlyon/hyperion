@@ -24,7 +24,8 @@ setup(
         'geopy',
         'lxml',
         'feedparser',
-        'brotlipy'
+        'brotlipy',
+        'aiobreaker'
     ],
     tests_require=[
         'pytest',

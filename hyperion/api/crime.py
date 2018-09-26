@@ -1,7 +1,7 @@
 from typing import Optional
 
+from aiobreaker import CircuitBreakerError
 from aiohttp import web
-from pybreaker import CircuitBreakerError
 
 from hyperion.fetch import ApiError
 from hyperion.fetch.police import fetch_crime

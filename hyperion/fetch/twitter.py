@@ -3,7 +3,7 @@ from typing import List
 
 import aiohttp
 import feedparser
-from pybreaker import CircuitBreaker
+from aiobreaker import CircuitBreaker
 
 from hyperion import logger
 from . import ApiError

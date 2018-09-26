@@ -3,8 +3,8 @@ from datetime import timedelta
 from typing import List
 
 import aiohttp
+from aiobreaker import CircuitBreaker
 from lxml.html import document_fromstring
-from pybreaker import CircuitBreaker
 
 from hyperion import logger
 from . import ApiError

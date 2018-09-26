@@ -3,7 +3,7 @@ from json import JSONDecodeError
 from typing import Optional
 
 import aiohttp
-from pybreaker import CircuitBreaker
+from aiobreaker import CircuitBreaker
 
 from hyperion import logger
 from hyperion.models import Postcode
