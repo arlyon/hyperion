@@ -4,8 +4,8 @@ with open("readme.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name='hyperion',
-    version='1.0',
+    name='hyperion-cli',
+    version='1.0.0',
     url='https://github.com/arlyon/hyperion',
     license='MIT',
     author='arlyon',
@@ -32,6 +32,7 @@ setup(
         'pytest-flake8',
         'pytest-mypy',
         'pytest-cov',
+        'pytest-asyncio',
         'hypothesis',
     ],
     entry_points='''
