@@ -1,8 +1,8 @@
 from datetime import timedelta
 from typing import List
 
-import aiohttp
-import feedparser
+from aiohttp import ClientSession, ClientConnectionError
+from feedparser import parse
 from aiobreaker import CircuitBreaker
 
 from hyperion import logger
@@ -20,15 +20,15 @@ async def fetch_twitter(handle: str) -> List:
     :raises ApiError: When the api couldn't connect.
     :raises CircuitBreakerError: When the circuit breaker is open.
     """
-    async with aiohttp.ClientSession() as session:
+    async with ClientSession() as session:
         try:
             async with session.get(f"http://twitrss.me/twitter_user_to_rss/?user={handle}") as request:
                 text = await request.text()
-        except aiohttp.ClientConnectionError as con_err:
-            logger.error(f"Could not connect to {con_err.host}")
+        except ClientConnectionError as con_err:
+            logger.debug(f"Could not connect to {con_err.host}")
             raise ApiError(f"Could not connect to {con_err.host}")
         else:
-            feed = feedparser.parse(text)
+            feed = parse(text)
             for x in feed.entries:
                 x["image"] = feed.feed["image"]["href"]
             return feed.entries

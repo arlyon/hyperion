@@ -1,54 +1,35 @@
-import json
-from math import floor
-from typing import Tuple, Dict, List, Optional, Coroutine
+"""
+The cli package hosts all the functionality for the command line tools.
+"""
 
-import geopy.distance
+from functools import partial
+from typing import Tuple, Optional, List
+
 from click import echo
-from colorama import Fore
-from geopy import Point
-from geopy.distance import vincenty
 
-from hyperion import logger
+from hyperion.cli.serializers import PostcodeSerializerHuman, PostcodeSerializerJSON
+from hyperion.cli.util import get_postcode_data
 from hyperion.fetch import ApiError
-from hyperion.fetch.police import fetch_crime
-from hyperion.fetch.wikipedia import fetch_nearby
 from hyperion.models import CachingError
-from hyperion.models.util import get_postcode, get_bikes, get_postcode_random
+from .getters import getters, PostcodeGetter
 
 
-async def display_json(postcodes: Dict[str, Dict]):
-    """
-    Outputs the data for the given postcodes in json format.
-    """
-    echo(json.dumps(postcodes))
+# todo write dataclass serialize function
+
+def partition(condition, collection) -> Tuple[List, List]:
+    """Partitions a list into two based on a condition."""
+    succeed, fail = [], []
+
+    for x in collection:
+        if condition(x):
+            succeed.append(x)
+        else:
+            fail.append(x)
+
+    return succeed, fail
 
 
-async def display_human(postcodes: Dict[str, Dict]):
-    """
-    Outputs the data for the given postcodes in a human-readable format.
-    """
-    for data in postcodes.values():
-        echo(f"Data for: {Fore.GREEN}{data['location']['postcode']}{Fore.RESET}")
-        echo(f"  Coordinates: {data['location']['lat']}, {data['location']['long']}")
-        echo(f"  Zone: {data['location']['zone']}")
-        echo(f"  District: {data['location']['district']}")
-        echo(f"  Country: {data['location']['country']}")
-
-        if "bikes" in data:
-            echo(f"  Stolen Bikes: {Fore.GREEN}{len(data['bikes'])}{Fore.RESET}")
-            echo("\n".join(
-                f"    {bike['model']} {bike['make']}: {bike['distance']}m away" for bike in data['bikes'][:10]))
-            if len(data['bikes']) > 10:
-                echo(f"    {Fore.BLUE}(limited to 10){Fore.RESET}")
-        if "crimes" in data:
-            echo(f"  Crimes Committed: {len(data['crimes'])}")
-        if "nearby" in data:
-            echo("  Points of Interest:")
-            for x in data["nearby"]:
-                echo(f"    {x['dist']}m - {x['title']}")
-
-
-async def cli(postcode_strings: Tuple[str], random_postcodes: int, *,
+async def cli(location_strings: Tuple[str], random_postcodes_count: int, *,
               bikes: bool = False, crime: bool = False,
               nearby: bool = False, as_json: bool = False):
     """
@@ -56,71 +37,52 @@ async def cli(postcode_strings: Tuple[str], random_postcodes: int, *,
     Tries to execute as many steps as possible to give the user
     the best understanding of the errors (if there are any).
 
-    :param postcode_strings: A list of desired postcodes.
-    :param random_postcodes: A number of random postcodes.
+    :param location_strings: A list of desired postcodes or coordinates.
+    :param random_postcodes_count: A number of random postcodes to fetch..
     :param bikes: A flag to include bikes.
     :param crime: A flag to include crime.
     :param nearby: A flag to include nearby.
     :param as_json: A flag to make json output.
     """
-    postcode_data = {}
-    listed_postcode_coroutines: List[Tuple[Optional[str], Coroutine]] = \
-        [(postcode, get_postcode(postcode)) for postcode in postcode_strings]
-    random_postcode_coroutines: List[Tuple[Optional[str], Coroutine]] = \
-        [(None, get_postcode_random()) for _ in range(random_postcodes)]
-    postcode_coroutines = listed_postcode_coroutines + random_postcode_coroutines
 
-    for string, coroutine in postcode_coroutines:
-        try:
-            postcode = await coroutine
-        except CachingError:
-            postcode = None
-
-        if postcode is None:
-            logger.error("Could not get postcode" + ("." if string is None else f' "{string}"'))
+    def match_getter(location) -> Optional[PostcodeGetter]:
+        for getter in getters:
+            if getter.can_provide(location):
+                return getter(location)
         else:
-            postcode_data[postcode.postcode] = postcode
+            return None
 
-    if len(postcode_data) != len(postcode_strings) + random_postcodes:
+    async def handle_getter(exception_list, getter):
+        try:
+            return await getter.get_postcodes()
+        except (CachingError, ApiError):
+            exception_list.append(f"Could not get data for {getter}")
+
+    async def handle_datas(exception_list, postcode):
+        postcode_data, new_exceptions = await get_postcode_data(postcode, bikes, crime, nearby)
+        exception_list += new_exceptions
+        return postcode_data
+
+    exception_list: List[Exception] = []
+
+    handle_getter = partial(handle_getter, exception_list)
+    handle_datas = partial(handle_datas, exception_list)
+
+    postcode_getters = {location: match_getter(location) for location in
+                        set(location_strings) | ({random_postcodes_count} if random_postcodes_count > 0 else set())}
+
+    matched, unmatched = partition(lambda k_v: k_v[1] is not None, postcode_getters.items())
+
+    for location, getter in unmatched:
+        echo(f"Invalid input for {location}")
+
+    postcodes_collection = [await handle_getter(getter) for location, getter in matched]
+
+    if len(exception_list) > 0:
+        for f in exception_list:
+            echo(str(f))
         return 1
 
-    success = True
-    for string, postcode in postcode_data.items():
-        data = {"location": postcode.serialize()}
-        coordinates = geopy.Point(postcode.lat, postcode.long)
-
-        if bikes:
-            try:
-                bikes_list = await get_bikes(postcode.postcode)
-            except CachingError:
-                success = False
-                echo("Could not get bikes.")
-            else:
-                if bikes_list is not None:
-                    data["bikes"] = [bike.serialize() for bike in bikes_list]
-                    for bike in data["bikes"]:
-                        point = Point(bike['latitude'], bike['longitude'])
-                        bike["distance"] = floor(vincenty(point, coordinates).kilometers * 1000)
-                    data["bikes"] = sorted(data["bikes"], key=lambda bike: bike["distance"])
-
-        if crime:
-            try:
-                data["crimes"] = await fetch_crime(coordinates.latitude, coordinates.longitude)
-            except ApiError:
-                success = False
-                echo("No nearby crimes cached, and can't be retrieved.")
-
-        if nearby:
-            try:
-                data["nearby"] = await fetch_nearby(coordinates.latitude, coordinates.longitude)
-            except ApiError:
-                success = False
-                echo("No nearby locations cached, and can't be retrieved.")
-
-        postcode_data[string] = data
-
-    if success:
-        await (display_json(postcode_data) if as_json else display_human(postcode_data))
-        return 0
-    else:
-        return 1
+    postcode_datas = [await handle_datas(postcode) for entry in postcodes_collection for postcode in entry]
+    serializer = (PostcodeSerializerJSON if as_json else PostcodeSerializerHuman)(postcode_datas)
+    echo(serializer.serialize())

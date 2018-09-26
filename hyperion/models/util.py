@@ -11,7 +11,7 @@ from hyperion import logger
 from hyperion.fetch import ApiError
 from hyperion.fetch.bikeregister import fetch_bikes
 from hyperion.fetch.police import fetch_neighbourhood
-from hyperion.fetch.postcode import fetch_postcode_from_string, fetch_postcode_random
+from hyperion.fetch.postcode import fetch_postcode_from_string, fetch_postcode_random, fetch_postcodes_from_coordinates
 from . import CachingError, PostCodeLike, Postcode, Neighbourhood, Bike, Location, Link
 
 
@@ -27,9 +27,9 @@ async def update_bikes(delta: Optional[timedelta] = None):
             try:
                 bike_data = await fetch_bikes()
             except ApiError:
-                logger.error(f"Failed to fetch bikes.")
+                logger.debug(f"Failed to fetch bikes.")
             except CircuitBreakerError:
-                logger.error(f"Failed to fetch bikes (circuit breaker open).")
+                logger.debug(f"Failed to fetch bikes (circuit breaker open).")
             else:
                 # save only bikes that aren't in the db
                 most_recent_bike = Bike.get_most_recent_bike()
@@ -39,7 +39,7 @@ async def update_bikes(delta: Optional[timedelta] = None):
                 )
 
                 counter = 0
-                with Bike.Meta.database.atomic():
+                with Bike._meta.database.atomic():
                     for bike in new_bikes:
                         bike.save()
                         counter += 1
@@ -157,11 +157,23 @@ async def get_postcode(postcode_like: PostCodeLike) -> Optional[Postcode]:
     return postcode
 
 
+async def get_postcodes_from_coordinates(lat: float, long: float) -> Optional[List[Postcode]]:
+    try:
+        postcodes = await fetch_postcodes_from_coordinates(lat, long)
+    except (ApiError, CircuitBreakerError):
+        raise CachingError(f"Requested postcode is not cached, and can't be retrieved.")
+    if postcodes is not None:
+        for postcode in postcodes:
+            postcode.save()
+
+    return postcodes
+
+
 async def get_neighbourhood(postcode_like: PostCodeLike) -> Optional[Neighbourhood]:
     """
     Gets a police neighbourhood from the database.
     Acts as a middleware between us and the API, caching results.
-    :param postcode: The UK postcode to look up.
+    :param postcode_like: The UK postcode to look up.
     :return: The Neighbourhood or None if the postcode does not exist.
     :raises CachingError: If the needed neighbourhood is not in cache, and the fetch isn't responding.
 
@@ -187,7 +199,7 @@ async def get_neighbourhood(postcode_like: PostCodeLike) -> Optional[Neighbourho
         locations = [Location.from_dict(neighbourhood, postcode, location) for location in data["locations"]]
         links = [Link.from_dict(neighbourhood, link) for link in data["links"]]
 
-        with Neighbourhood.Meta.database.atomic():
+        with Neighbourhood._meta.database.atomic():
             neighbourhood.save()
             postcode.neighbourhood = neighbourhood
             postcode.save()

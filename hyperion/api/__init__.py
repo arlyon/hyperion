@@ -1,3 +1,7 @@
+"""
+The api package handles the web app and all the endpoints in the hyperion http server.
+"""
+
 from datetime import timedelta
 
 from aiohttp import web

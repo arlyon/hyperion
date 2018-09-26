@@ -1,5 +1,5 @@
 """
-The fetch module is the interface to the outside world. For the best flexibility it should
+The fetch package is the interface to the outside world. For the best flexibility it should
 not have access to any other part of the application so that its coupling is limited.
 """
 

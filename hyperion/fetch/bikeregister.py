@@ -2,7 +2,7 @@ import json
 from datetime import timedelta
 from typing import List
 
-import aiohttp
+from aiohttp import ClientSession, ClientConnectionError
 from aiobreaker import CircuitBreaker
 from lxml.html import document_fromstring
 
@@ -24,12 +24,12 @@ async def fetch_bikes() -> List[dict]:
     :return: All the currently registered bikes.
     :raise ApiError: When there was an error connecting to the API.
     """
-    async with aiohttp.ClientSession() as session:
+    async with ClientSession() as session:
         try:
             async with session.get('https://www.bikeregister.com/stolen-bikes') as request:
                 document = document_fromstring(await request.text())
-        except aiohttp.ClientConnectionError as con_err:
-            logger.error(f"Could not connect to {con_err.host}")
+        except ClientConnectionError as con_err:
+            logger.debug(f"Could not connect to {con_err.host}")
             raise ApiError(f"Could not connect to {con_err.host}")
 
         token = document.xpath("//input[@name='_token']")
@@ -65,8 +65,8 @@ async def fetch_bikes() -> List[dict]:
         try:
             async with session.post('https://www.bikeregister.com/stolen-bikes', headers=headers, data=data) as request:
                 bikes = json.loads(await request.text())
-        except aiohttp.ClientConnectionError as con_err:
-            logger.error(f"Could not connect to {con_err.host}")
+        except ClientConnectionError as con_err:
+            logger.debug(f"Could not connect to {con_err.host}")
             raise ApiError(f"Could not connect to {con_err.host}")
         except json.JSONDecodeError as dec_err:
             logger.error(f"Could not decode data: {dec_err.msg}")

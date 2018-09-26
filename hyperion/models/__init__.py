@@ -1,3 +1,7 @@
+"""
+The models package hosts the io for the database, currently through peewee.
+"""
+
 from os.path import expanduser, join
 from typing import Union, Optional
 
