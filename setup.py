@@ -26,7 +26,8 @@ setup(
         'lxml',
         'feedparser',
         'brotlipy',
-        'aiobreaker'
+        'aiobreaker',
+        'gunicorn'
     ],
     tests_require=[
         'pytest',
