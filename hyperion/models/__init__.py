@@ -20,7 +20,7 @@ class CachingError(ApiError):
     pass
 
 
-def initialize_database(path: Optional[str]):
+def initialize_database(path: Optional[str] = None):
     path = path if path is not None else join(expanduser("~"), '.hyperion.db')
     database = SqliteDatabase(path)
     database_proxy.initialize(database)

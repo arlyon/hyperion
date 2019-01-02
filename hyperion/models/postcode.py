@@ -1,4 +1,6 @@
 import peewee as pw
+from geopy import Point
+from geopy.distance import geodesic
 from playhouse.shortcuts import model_to_dict
 
 from .base import BaseModel
@@ -20,3 +22,8 @@ class Postcode(BaseModel):
 
     def serialize(self):
         return model_to_dict(self, exclude=[Postcode.id])
+
+    def distance_to(self, other: 'Postcode'):
+        source = Point(self.lat, self.long)
+        destination = Point(other.lat, other.long)
+        return geodesic(source, destination).kilometers

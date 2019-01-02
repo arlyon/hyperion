@@ -5,7 +5,7 @@ with open("readme.md", "r") as fh:
 
 setup(
     name='hyperion-cli',
-    version='1.0.0',
+    version='1.0.1',
     url='https://github.com/arlyon/hyperion',
     license='MIT',
     author='arlyon',

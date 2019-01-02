@@ -4,7 +4,7 @@ from typing import List, Optional
 
 from aiobreaker import CircuitBreakerError
 from geopy import Point
-from geopy.distance import vincenty
+from geopy.distance import vincenty, geodesic
 from peewee import DoesNotExist
 
 from hyperion import logger
@@ -70,7 +70,7 @@ async def should_update_bikes(delta: timedelta):
         return True
 
 
-async def get_bikes(postcode: PostCodeLike, kilometers=10) -> Optional[List[Bike]]:
+async def get_bikes(postcode: PostCodeLike, kilometers=1) -> Optional[List[Bike]]:
     """
     Gets stolen bikes from the database within a
     certain radius (km) of a given postcode. Selects
@@ -93,7 +93,7 @@ async def get_bikes(postcode: PostCodeLike, kilometers=10) -> Optional[List[Bike
 
     # create point and distance
     center = Point(postcode.lat, postcode.long)
-    distance = vincenty(kilometers=kilometers)
+    distance = geodesic(kilometers=kilometers)
 
     # calculate edges of a square and retrieve
     lat_end = distance.destination(point=center, bearing=0).latitude
@@ -111,7 +111,7 @@ async def get_bikes(postcode: PostCodeLike, kilometers=10) -> Optional[List[Bike
     # filter out items in square that aren't within the radius and return
     return [
         bike for bike in bikes_in_area
-        if vincenty(Point(bike.latitude, bike.longitude), center).kilometers < kilometers
+        if geodesic(Point(bike.latitude, bike.longitude), center).kilometers < kilometers
     ]
 
 
