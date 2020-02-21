@@ -1,7 +1,7 @@
 """
 The api package handles the web app and all the endpoints in the hyperion http server.
 """
-
+from asyncio import CancelledError
 from datetime import timedelta
 
 from aiohttp import web
@@ -12,7 +12,8 @@ from .bike import api_bikes
 from .crime import api_crime, api_neighbourhood
 from .geo import api_postcode, api_nearby
 from .social import api_twitter
-from .util import normalize_postcode_middleware
+from .util import normalize_postcode_middleware, enable_cross_origin
+from ..settings import SERVER_HOST, SERVER_PORT
 
 
 async def start_background_tasks(app):
@@ -39,3 +40,17 @@ app.add_routes([
     web.get('/api/postcode/{postcode}/nearby/{limit}/', api_nearby, name='nearby-radius'),
     web.get('/api/twitter/{handle}/', api_twitter, name='twitter'),
 ])
+
+
+def run_api_server(host=SERVER_HOST, port=SERVER_PORT, should_enable_cross_origin=True):
+    if should_enable_cross_origin:
+        enable_cross_origin(app)
+
+    try:
+        web.run_app(app, host=host, port=port)
+    except CancelledError as e:
+        if e.__context__ is not None:
+            print(f"Could not bind to address {host}:{port}" if e.__context__.errno == 48 else e.__context__)
+            exit(1)
+        else:
+            print("Exiting")

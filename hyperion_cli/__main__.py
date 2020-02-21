@@ -12,8 +12,7 @@ from click import Path
 from colorama import Fore
 
 from . import logger
-from .api import app
-from .api.util import enable_cross_origin
+from .api import run_api_server
 from .cli import cli
 from .models import util, initialize_database
 
@@ -30,8 +29,8 @@ set_event_loop_policy(uvloop.EventLoopPolicy())
 @click.option('--update-bikes', is_flag=True)
 @click.option('--api-server', is_flag=True)
 @click.option('--cross-origin', is_flag=True)
-@click.option('--host', '-h', type=str, default='0.0.0.0')
-@click.option('--port', '-p', type=int, default=8000)
+@click.option('--host', '-h', type=str)
+@click.option('--port', '-p', type=int)
 @click.option('--db-path', type=Path(dir_okay=False))
 @click.option('--verbose', '-v', count=True)
 def run_cli(locations, random, bikes, crime, nearby, json, update_bikes, api_server, cross_origin, host, port, db_path,
@@ -71,19 +70,12 @@ def run_cli(locations, random, bikes, crime, nearby, json, update_bikes, api_ser
         loop.run_until_complete(util.update_bikes())
 
     if api_server:
-        if cross_origin:
-            enable_cross_origin(app)
-
-        try:
-            web.run_app(app, host=host, port=port)
-        except CancelledError as e:
-            if e.__context__ is not None:
-                click.echo(Fore.RED + (
-                    f"Could not bind to address {host}:{port}" if e.__context__.errno == 48 else e.__context__))
-                exit(1)
-            else:
-                click.echo("Goodbye!")
-
+        server_args = {"should_enable_cross_origin": cross_origin}
+        if host is not None:
+            server_args["host"] = host
+        if port is not None:
+            server_args["port"] = port
+        run_api_server(**server_args)
     elif len(locations) > 0 or random > 0:
         exit(loop.run_until_complete(cli(locations, random, bikes=bikes, crime=crime, nearby=nearby, as_json=json)))
     else:

@@ -24,7 +24,7 @@ python-dotenv = "^0.11.0"
 [tool.poetry.dev-dependencies]
 
 [tool.poetry.scripts]
-cli = "hyperion.__main__:run_cli"
+cli = "hyperion_cli.__main__:run_cli"
 
 [build-system]
 requires = ["poetry>=0.12"]
