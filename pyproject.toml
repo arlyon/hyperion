@@ -22,6 +22,10 @@ peony-twitter = "^1.1.5"
 python-dotenv = "^0.11.0"
 
 [tool.poetry.dev-dependencies]
+pytest = "^5.3.5"
+pytest-asyncio = "^0.10.0"
+pytest-mypy = "^0.4.2"
+pytest-flake8 = "^1.0.4"
 
 [tool.poetry.scripts]
 server = "hyperion_cli.__main__:run_server"

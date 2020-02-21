@@ -36,3 +36,12 @@ Data is aggregated and cached from the following sources:
 
 A [web app](https://github.com/arlyon/hyperion-web) for interacting
 with this API is available as well.
+
+### Run Tests
+
+Running tests and linters can be done through poetry:
+
+```
+poetry run pytest test/
+poetry run pytest --flake8 --mypy hyperion_cli
+```

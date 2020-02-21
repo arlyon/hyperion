@@ -11,7 +11,7 @@ from os import remove
 
 from pytest import mark, fixture
 
-from models import initialize_database
+from hyperion_cli.models import initialize_database
 from test.util import postcodes_io_ok
 
 
