@@ -3,11 +3,11 @@ from typing import List, Dict, Optional
 
 from geopy import Point
 
-from hyperion.fetch import ApiError
-from hyperion.fetch.police import fetch_crime
-from hyperion.fetch.wikipedia import fetch_nearby
-from hyperion.models import Postcode, Bike, CachingError
-from hyperion.models.util import get_bikes
+from ..fetch import ApiError
+from ..fetch.police import fetch_crime
+from ..fetch.wikipedia import fetch_nearby
+from ..models import Postcode, Bike, CachingError
+from ..models.util import get_bikes
 
 
 @dataclass

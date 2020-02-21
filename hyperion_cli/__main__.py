@@ -34,8 +34,8 @@ set_event_loop_policy(uvloop.EventLoopPolicy())
 @click.option('--port', '-p', type=int, default=8000)
 @click.option('--db-path', type=Path(dir_okay=False))
 @click.option('--verbose', '-v', count=True)
-def run(locations, random, bikes, crime, nearby, json, update_bikes, api_server, cross_origin, host, port, db_path,
-        verbose):
+def run_cli(locations, random, bikes, crime, nearby, json, update_bikes, api_server, cross_origin, host, port, db_path,
+            verbose):
     """
     Runs the program. Takes a list of postcodes or coordinates and
     returns various information about them. If using the cli, make
@@ -91,4 +91,4 @@ def run(locations, random, bikes, crime, nearby, json, update_bikes, api_server,
 
 
 if __name__ == '__main__':
-    run()
+    run_cli()

@@ -4,14 +4,14 @@ from typing import List, Optional
 
 from aiobreaker import CircuitBreakerError
 from geopy import Point
-from geopy.distance import vincenty, geodesic
+from geopy.distance import geodesic
 from peewee import DoesNotExist
 
-from hyperion import logger
-from hyperion.fetch import ApiError
-from hyperion.fetch.bikeregister import fetch_bikes
-from hyperion.fetch.police import fetch_neighbourhood
-from hyperion.fetch.postcode import fetch_postcode_from_string, fetch_postcode_random, fetch_postcodes_from_coordinates
+from .. import logger
+from ..fetch import ApiError
+from ..fetch.bikeregister import fetch_bikes
+from ..fetch.police import fetch_neighbourhood
+from ..fetch.postcode import fetch_postcode_from_string, fetch_postcode_random, fetch_postcodes_from_coordinates
 from . import CachingError, PostCodeLike, Postcode, Neighbourhood, Bike, Location, Link
 
 

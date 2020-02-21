@@ -1,11 +1,10 @@
 from json import JSONDecodeError
 from typing import Dict, List, Optional
 
-import aiohttp
 from aiohttp import ClientConnectionError, ClientSession
 from aiobreaker import CircuitBreaker
 
-from hyperion import logger
+from .. import logger
 from . import ApiError
 
 wikipedia_breaker = CircuitBreaker()

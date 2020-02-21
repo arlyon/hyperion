@@ -7,7 +7,7 @@ from datetime import timedelta
 from aiohttp import web
 from aiohttp.web_middlewares import normalize_path_middleware
 
-from hyperion.models.util import update_bikes
+from ..models.util import update_bikes
 from .bike import api_bikes
 from .crime import api_crime, api_neighbourhood
 from .geo import api_postcode, api_nearby

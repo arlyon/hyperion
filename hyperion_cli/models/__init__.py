@@ -7,7 +7,7 @@ from typing import Union, Optional
 
 from peewee import SqliteDatabase
 
-from hyperion.fetch import ApiError
+from ..fetch import ApiError
 from .base import database_proxy
 from .bike import Bike
 from .neighbourhood import Location, Neighbourhood, Link

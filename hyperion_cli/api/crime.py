@@ -3,10 +3,10 @@ from typing import Optional
 from aiobreaker import CircuitBreakerError
 from aiohttp import web
 
-from hyperion.fetch import ApiError
-from hyperion.fetch.police import fetch_crime
-from hyperion.models import Postcode, CachingError
-from hyperion.models.util import get_postcode, get_neighbourhood, get_postcode_random
+from ..fetch import ApiError
+from ..fetch.police import fetch_crime
+from ..models import Postcode, CachingError
+from ..models.util import get_postcode, get_neighbourhood, get_postcode_random
 from .util import str_json_response
 
 

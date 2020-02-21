@@ -1,7 +1,7 @@
 from aiohttp import web
 
-from hyperion.fetch import ApiError
-from hyperion.fetch.twitter import fetch_twitter
+from ..fetch import ApiError
+from ..fetch.twitter import fetch_twitter
 from .util import str_json_response
 
 

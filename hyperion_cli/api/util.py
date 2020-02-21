@@ -6,7 +6,7 @@ import aiohttp_cors as aiohttp_cors
 from aiohttp import web
 from aiohttp.web import json_response, middleware
 
-from hyperion.util import is_uk_postcode
+from ..util import is_uk_postcode
 
 str_dumps = partial(dumps, default=str)
 str_json_response = partial(json_response, dumps=str_dumps)

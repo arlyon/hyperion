@@ -7,10 +7,10 @@ from typing import Tuple, Optional, List
 
 from click import echo
 
-from hyperion.cli.serializers import PostcodeSerializerHuman, PostcodeSerializerJSON
-from hyperion.cli.util import get_postcode_data
-from hyperion.fetch import ApiError
-from hyperion.models import CachingError
+from ..cli.serializers import PostcodeSerializerHuman, PostcodeSerializerJSON
+from ..cli.util import get_postcode_data
+from ..fetch import ApiError
+from ..models import CachingError
 from .getters import getters, PostcodeGetter
 
 

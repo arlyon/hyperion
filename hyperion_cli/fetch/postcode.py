@@ -5,8 +5,8 @@ from typing import Optional, Union, List
 from aiohttp import ClientSession, ClientConnectionError
 from aiobreaker import CircuitBreaker
 
-from hyperion import logger
-from hyperion.models import Postcode
+from .. import logger
+from ..models import Postcode
 from . import ApiError
 
 

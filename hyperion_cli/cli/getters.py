@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
-from hyperion.models.util import get_postcode, get_postcodes_from_coordinates, get_postcode_random
-from hyperion.util import is_uk_postcode
+from ..models.util import get_postcode, get_postcodes_from_coordinates, get_postcode_random
+from ..util import is_uk_postcode
 
 
 class PostcodeGetter(ABC):

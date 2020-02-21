@@ -6,7 +6,7 @@ from aiohttp import ClientSession, ClientConnectionError
 from aiobreaker import CircuitBreaker
 from lxml.html import document_fromstring
 
-from hyperion import logger
+from .. import logger
 from . import ApiError
 
 bike_breaker = CircuitBreaker(fail_max=3, timeout_duration=timedelta(days=3))

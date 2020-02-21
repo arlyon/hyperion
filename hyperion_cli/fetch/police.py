@@ -5,7 +5,7 @@ from typing import Optional, List, Dict
 from aiohttp import ClientSession, ClientConnectionError
 from aiobreaker import CircuitBreaker
 
-from hyperion import logger
+from .. import logger
 from . import ApiError
 
 police_breaker = CircuitBreaker(fail_max=3, timeout_duration=timedelta(hours=1))

@@ -2,10 +2,9 @@ from datetime import timedelta
 from typing import List
 
 from aiohttp import ClientSession, ClientConnectionError
-from feedparser import parse
 from aiobreaker import CircuitBreaker
 
-from hyperion import logger
+from .. import logger
 from . import ApiError
 
 twitrss_breaker = CircuitBreaker(3, timedelta(hours=1))
