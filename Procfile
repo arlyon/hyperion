@@ -1,1 +1,0 @@
-web: gunicorn hyperion.api.run:app -k 'aiohttp.worker.GunicornUVLoopWebWorker'
