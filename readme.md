@@ -10,6 +10,17 @@ Simply pip install the package, and then get started with
     pip install hyperion-cli
     hyperion --help
 
+### Server
+
+Running the server can be done either through the cli app, or via a the
+official docker container. There are some environment variables that
+can be used to set the host and port (but are overridden by the CLI args).
+
+```bash
+HYPERION_HOST=0.0.0.0
+HYPERION_PORT=8080
+```
+
 ### Data
 
 Data is aggregated and cached from the following sources:

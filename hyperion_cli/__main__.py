@@ -1,19 +1,19 @@
 """
 The main hyperion entry point. Run `hyperion --help` for more info.
 """
-
 import logging
-from asyncio import get_event_loop, CancelledError, set_event_loop_policy
+from asyncio import get_event_loop, set_event_loop_policy
 
 import click
 import uvloop
-from aiohttp import web
 from click import Path
 from colorama import Fore
 
+from .fetch import ApiError
 from . import logger
 from .api import run_api_server
 from .cli import cli
+from .fetch.twitter import initialize_twitter
 from .models import util, initialize_database
 
 set_event_loop_policy(uvloop.EventLoopPolicy())
@@ -63,6 +63,12 @@ def run_cli(locations, random, bikes, crime, nearby, json, update_bikes, api_ser
 
     initialize_database(db_path)
 
+    try:
+        initialize_twitter()
+    except ApiError as e:
+        logging.error(f"Could not initialize twitter: {e}")
+        exit(1)
+
     loop = get_event_loop()
 
     if update_bikes:
@@ -80,6 +86,20 @@ def run_cli(locations, random, bikes, crime, nearby, json, update_bikes, api_ser
         exit(loop.run_until_complete(cli(locations, random, bikes=bikes, crime=crime, nearby=nearby, as_json=json)))
     else:
         click.echo(Fore.RED + "Either include a post code, or the --api-server flag.")
+
+
+def run_server():
+    logging.basicConfig(level=logging.INFO)
+
+    initialize_database()
+
+    try:
+        initialize_twitter()
+    except ApiError as e:
+        logging.error(f"Could not initialize twitter: {e}")
+        exit(1)
+
+    run_api_server(should_enable_cross_origin=True)
 
 
 if __name__ == '__main__':
