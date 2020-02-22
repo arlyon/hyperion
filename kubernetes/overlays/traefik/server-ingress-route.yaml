@@ -1,0 +1,16 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: hyperion-server
+spec:
+  entryPoints:
+  - websecure
+  routes:
+  - kind: Rule
+    match: Host(`api.crime.arlyon.dev`)
+    services:
+    - name: server
+      namespace: hyperion
+      port: 80
+  tls:
+    certResolver: ssl

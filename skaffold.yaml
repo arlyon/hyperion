@@ -1,0 +1,24 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+metadata:
+  name: hyperion
+deploy:
+  kustomize:
+    paths: 
+    - kubernetes/base
+build:
+  artifacts:
+  - image: arlyon/hyperion
+profiles:
+- name: traefik
+  deploy:
+    kustomize:
+      paths:
+      - kubernetes/overlays/traefik
+portForward:
+- resourceType: service
+  resourceName: server
+  namespace: workout
+  address: 0.0.0.0
+  port: 80
+  localPort: 8080

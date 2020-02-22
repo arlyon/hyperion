@@ -1,0 +1,9 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: hyperion-external-name
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: api.crime.arlyon.dev
+spec:
+  type: ExternalName
+  externalName: traefik.arlyon.dev

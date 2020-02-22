@@ -1,0 +1,42 @@
+#
+# The definition file for the server service.
+# First defines a deployment that determines
+# how many instances should run, as well as a
+# service to manage it.
+#
+apiVersion: v1
+kind: Service
+metadata:
+  name: server
+  namespace: hyperion
+spec:
+  selector:
+    app: server
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server
+  namespace: hyperion
+  labels:
+    app: server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: server
+  template:
+    metadata:
+      labels:
+        app: server
+    spec:
+      containers:
+      - name: server
+        image: arlyon/hyperion
+        ports:
+        - containerPort: 80
