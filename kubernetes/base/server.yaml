@@ -40,3 +40,6 @@ spec:
         image: arlyon/hyperion
         ports:
         - containerPort: 80
+        envFrom:
+          - secretRef:
+              name: twitter-secrets

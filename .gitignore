@@ -112,3 +112,4 @@ data\.db
 docs/
 todo
 .DS_Store
+kubernetes/base/secrets.yaml
