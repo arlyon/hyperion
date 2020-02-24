@@ -18,4 +18,4 @@ async def api_twitter(request):
         posts = await fetch_twitter(handle)
     except ApiError as e:
         raise web.HTTPInternalServerError(body=e.status)
-    return str_json_response(posts)
+    return str_json_response(posts.to_dict())
