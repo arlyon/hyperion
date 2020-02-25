@@ -6,7 +6,7 @@ from aiohttp import ClientSession, ClientConnectionError
 from aiobreaker import CircuitBreaker
 from lxml.html import document_fromstring
 
-from util import dataloader
+from ..util import dataloader
 from .. import logger
 from . import ApiError
 

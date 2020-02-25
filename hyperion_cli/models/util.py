@@ -5,8 +5,9 @@ from typing import List, Optional
 from aiobreaker import CircuitBreakerError
 from geopy import Point
 from geopy.distance import geodesic
-from peewee import DoesNotExist
+from peewee import DoesNotExist, chunked
 
+from ..util import dataloader
 from .. import logger
 from ..fetch import ApiError
 from ..fetch.bikeregister import fetch_bikes
@@ -33,17 +34,13 @@ async def update_bikes(delta: Optional[timedelta] = None):
             else:
                 # save only bikes that aren't in the db
                 most_recent_bike = Bike.get_most_recent_bike()
-                new_bikes = (
-                    Bike.from_dict(bike) for index, bike in enumerate(bike_data)
-                    if index > (most_recent_bike.id if most_recent_bike is not None else -1)
-                )
+                most_recent_bike_id = most_recent_bike.id if most_recent_bike is not None else -1
+                new_bikes = [Bike.from_dict(bike) for index, bike in enumerate(bike_data)][most_recent_bike_id+1:]
 
-                counter = 0
                 with Bike._meta.database.atomic():
-                    for bike in new_bikes:
-                        bike.save()
-                        counter += 1
-                logger.info(f"Saved {counter} new entries.")
+                    Bike.bulk_create(new_bikes, 1000)
+
+                logger.info(f"Saved {len(new_bikes)} new entries.")
         else:
             logger.info("Bike data up to date.")
 
