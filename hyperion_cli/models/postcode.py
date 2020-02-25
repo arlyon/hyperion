@@ -27,3 +27,14 @@ class Postcode(BaseModel):
         source = Point(self.lat, self.long)
         destination = Point(other.lat, other.long)
         return geodesic(source, destination).kilometers
+
+    @staticmethod
+    def from_dict(data):
+        return Postcode(
+            postcode=data["postcode"].replace(" ", ""),
+            lat=data["latitude"],
+            long=data["longitude"],
+            country=data["country"],
+            district=data["admin_district"],
+            zone=data["msoa"]
+        )

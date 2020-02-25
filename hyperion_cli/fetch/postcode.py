@@ -16,16 +16,6 @@ base_url = "https://api.postcodes.io"
 
 @postcode_breaker
 async def _get_postcode_from_url(path) -> Optional[Union[Postcode, List[Postcode]]]:
-    def postcode_from_dict(data):
-        return Postcode(
-            postcode=data["postcode"],
-            lat=data["latitude"],
-            long=data["longitude"],
-            country=data["country"],
-            district=data["admin_district"],
-            zone=data["msoa"]
-        )
-
     async with ClientSession() as session:
         try:
             async with session.get(base_url + path) as request:
@@ -41,9 +31,9 @@ async def _get_postcode_from_url(path) -> Optional[Union[Postcode, List[Postcode
             raise ApiError(f"Could not decode data: {dec_err}")
 
     if isinstance(postcode_request["result"], list):
-        return [postcode_from_dict(entry) for entry in postcode_request["result"]]
+        return [Postcode.from_dict(entry) for entry in postcode_request["result"]]
     else:
-        return postcode_from_dict(postcode_request["result"])
+        return Postcode.from_dict(postcode_request["result"])
 
 
 async def fetch_postcode_from_string(postcode: str) -> Optional[Postcode]:
