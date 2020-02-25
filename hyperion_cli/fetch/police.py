@@ -2,7 +2,7 @@ from datetime import timedelta
 from json import JSONDecodeError
 from typing import Optional, List, Dict
 
-from aiohttp import ClientSession, ClientConnectionError
+from aiohttp import ClientSession, ClientConnectionError, ContentTypeError
 from aiobreaker import CircuitBreaker
 
 from .. import logger
@@ -33,6 +33,10 @@ async def fetch_neighbourhood(lat: float, long: float) -> Optional[dict]:
         except JSONDecodeError as dec_err:
             logger.error(f"Could not decode data: {dec_err}")
             raise ApiError(f"Could not decode data: {dec_err}")
+        except ContentTypeError as con_err:
+            body = await request.text()
+            logger.exception(f"Invalid content type: {con_err}\n\n{body}\n\n")
+            raise ApiError(f"Police API did not serve valid json: {con_err}")
 
         neighbourhood_url = f"https://data.police.uk/api/{neighbourhood['force']}/{neighbourhood['neighbourhood']}"
 
@@ -45,6 +49,10 @@ async def fetch_neighbourhood(lat: float, long: float) -> Optional[dict]:
         except JSONDecodeError as dec_err:
             logger.error(f"Could not decode data: {dec_err}")
             raise ApiError(f"Could not decode data: {dec_err}")
+        except ContentTypeError as con_err:
+            body = await request.text()
+            logger.exception(f"Invalid content type: {con_err}\n\n{body}\n\n")
+            raise ApiError(f"Police API did not serve valid json: {con_err}")
 
         return neighbourhood_data
 
@@ -68,5 +76,9 @@ async def fetch_crime(lat: float, long: float) -> List[Dict]:
         except JSONDecodeError as dec_err:
             logger.error(f"Could not decode data: {dec_err}")
             raise ApiError(f"Could not decode data: {dec_err}")
+        except ContentTypeError as con_err:
+            body = await request.text()
+            logger.exception(f"Invalid content type: {con_err}\n\n{body}\n\n")
+            raise ApiError(f"Police API did not serve valid json: {con_err}")
         else:
             return crime_request
