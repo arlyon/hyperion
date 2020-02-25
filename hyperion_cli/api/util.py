@@ -43,5 +43,5 @@ def enable_cross_origin(app):
             allow_headers="*",
         )
     })
-    for route in list(app.router.routes()):
+    for route in app.router.routes():
         cors.add(route)
