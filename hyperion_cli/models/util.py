@@ -70,7 +70,7 @@ async def should_update_bikes(delta: timedelta):
         return True
 
 
-async def get_bikes(postcode: PostCodeLike, kilometers=1) -> Optional[List[Bike]]:
+async def get_bikes(postcode: PostCodeLike, kilometers=1.0) -> Optional[List[Bike]]:
     """
     Gets stolen bikes from the database within a
     certain radius (km) of a given postcode. Selects

@@ -16,7 +16,7 @@ async def api_bikes(request):
     postcode: Optional[str] = request.match_info.get('postcode', None)
 
     try:
-        radius = int(request.match_info.get('radius', 10))
+        radius = float(request.match_info.get('radius', 10))
     except ValueError:
         raise web.HTTPBadRequest(text="Invalid Radius")
 
