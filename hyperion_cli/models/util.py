@@ -131,6 +131,7 @@ async def get_postcode_random() -> Postcode:
     return postcode
 
 
+@dataloader
 async def get_postcode(postcode_like: PostCodeLike) -> Optional[Postcode]:
     """
     Gets the postcode object for a given postcode string.
@@ -147,6 +148,7 @@ async def get_postcode(postcode_like: PostCodeLike) -> Optional[Postcode]:
     try:
         postcode = Postcode.get(Postcode.postcode == postcode_like)
     except DoesNotExist:
+        logger.info(f"Postcode {postcode_like} not cached, fetching from API")
         try:
             postcode = await fetch_postcode_from_string(postcode_like)
         except (ApiError, CircuitBreakerError):

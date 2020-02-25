@@ -6,6 +6,7 @@ from aiohttp import ClientSession, ClientConnectionError
 from aiobreaker import CircuitBreaker
 from lxml.html import document_fromstring
 
+from util import dataloader
 from .. import logger
 from . import ApiError
 
@@ -13,6 +14,7 @@ bike_breaker = CircuitBreaker(fail_max=3, timeout_duration=timedelta(days=3))
 
 
 @bike_breaker
+@dataloader
 async def fetch_bikes() -> List[dict]:
     """
     Gets the full list of bikes from the bikeregister site.
